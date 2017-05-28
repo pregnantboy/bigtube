@@ -1,0 +1,29 @@
+/*#placeholder-player {
+  width: 100vw !important;
+  height: 100vh !important;
+}*/
+
+#placeholder-player .player-api.player-width.player-height {
+  width: 100vw !important;
+  min-width: 1003px;
+  height: 100vh !important;
+  max-width: 100%;
+  left: -50vw;
+}
+
+#player-mole-container #player-api {
+  height: 100vh;
+  width: 100vw;
+  min-width: 1003px;
+  max-width: 100%;  
+  margin-left: 50vw;
+  left: -50vw;
+}
+
+#masthead-positioner-height-offset {
+  display: none;
+}
+
+#masthead-positioner {
+  position: static !important;
+}
