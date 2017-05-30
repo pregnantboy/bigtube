@@ -1,6 +1,6 @@
 {
   "name": "__MSG_appName__",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "manifest_version": 2,
   "description": "__MSG_appDescription__",
   "icons": {
@@ -9,7 +9,6 @@
   },
   "background": {
     "scripts": [
-      "bower_components/jquery/dist/jquery.min.js",      
       "scripts/background.js"
     ]
   },
@@ -17,12 +16,13 @@
   "permissions": [
     "storage",
     "tabs",
+    "activeTab",
+    "webNavigation",
     "cookies",
     "*://*.youtube.com/*"
   ],
   "browser_action": {
-    "default_icon": {
-    },
+    "default_icon": {},
     "default_title": "Bigtube"
   }
 }
