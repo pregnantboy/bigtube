@@ -1,9 +1,4 @@
-/*#placeholder-player {
-  width: 100vw !important;
-  height: 100vh !important;
-}*/
-
-#placeholder-player .player-api.player-width.player-height {
+.bigtube #placeholder-player .player-api.player-width.player-height {
   width: 100vw !important;
   min-width: 1003px;
   height: 100vh !important;
@@ -11,11 +6,11 @@
   left: -50vw;
 }
 
-#player-mole-container #player-api {
+.bigtube #player-mole-container #player-api {
   height: 100vh;
   width: 100vw;
   min-width: 1003px;
-  max-width: 100%;  
+  max-width: 100%;
   margin-left: 50vw;
   left: -50vw;
 }
@@ -27,6 +22,16 @@
 .bigtube #masthead-positioner {
   opacity: 0;
   transition-duration: 0.3s;
+}
+
+.bigtube #watch-appbar-playlist {
+  margin-top: calc( 100vh - 480px);
+}
+
+@media screen and (min-height: 870px) and (min-width: 1320px) {
+  .bigtube #watch-appbar-playlist {
+    margin-top: calc( 100vh - 720px);
+  }
 }
 
 #masthead-positioner:hover {

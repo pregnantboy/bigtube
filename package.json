@@ -1,7 +1,13 @@
 {
   "name": "bigtube",
-  "private": true,
-  "engines": {
-    "node": ">=0.8.0"
+  "version": "1.0.2",
+  "description": "Expands Youtube video to browser size",
+  "scripts": {
+    "dist": "gulp"
+  },
+  "dependencies": {
+    "gulp": "^3.9.1",
+    "gulp-javascript-obfuscator": "^1.1.2",
+    "rimraf": "^2.6.1"
   }
 }

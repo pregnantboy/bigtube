@@ -1,5 +1,46 @@
 'use strict';
 
+var css = `
+.bigtube #placeholder-player .player-api.player-width.player-height {
+  width: 100vw !important;
+  min-width: 1003px;
+  height: 100vh !important;
+  max-width: 100%;
+  left: -50vw;
+}
+
+.bigtube #player-mole-container #player-api {
+  height: 100vh;
+  width: 100vw;
+  min-width: 1003px;
+  max-width: 100%;
+  margin-left: 50vw;
+  left: -50vw;
+}
+
+.bigtube #masthead-positioner-height-offset {
+  display: none;
+}
+
+.bigtube #masthead-positioner {
+  opacity: 0;
+  transition-duration: 0.3s;
+}
+
+.bigtube #watch-appbar-playlist {
+  margin-top: calc( 100vh - 480px);
+}
+
+@media screen and (min-height: 870px) and (min-width: 1320px) {
+  .bigtube #watch-appbar-playlist {
+    margin-top: calc( 100vh - 720px);
+  }
+}
+
+#masthead-positioner:hover {
+  opacity: 1;
+}`;
+
 function setCookie(value) {
   if (!value) {
     return;
@@ -37,14 +78,14 @@ function setToggle(value, callback) { // expects function(){...}
 function insertYoutubeCSS(tab) {
   if (tab.url && tab.url.match(/^http?s\:\/\/(www\.)?youtube\.com/)) {
     if (tab.url.match(/^http?s\:\/\/(www\.)?youtube\.com\/watch\?/)) {
+      chrome.tabs.insertCSS(tab.id, {
+        code: css
+      });
       getToggle(function (toggle) {
         if (toggle) {
           chrome.tabs.executeScript(tab.id, {
             code: "document.getElementById('body-container').classList.add('bigtube');",
             runAt: "document_end"
-          });
-          chrome.tabs.insertCSS(tab.id, {
-            file: 'styles/bigtube.css'
           });
         }
       });
@@ -58,7 +99,7 @@ function insertYoutubeCSS(tab) {
 }
 
 function setIcon(value) {
-  var path = (value) ? "images/Icon-38.png" : "images/Icon-disabled-38.png";
+  var path = (value) ? "images/icon-38.png" : "images/icon-disabled-38.png";
   chrome.browserAction.setIcon({
     path: path
   });
