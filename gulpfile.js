@@ -1,5 +1,6 @@
 var gulp = require('gulp');
 var rimraf = require('rimraf');
+var zip = require('gulp-zip');
 var javascriptObfuscator = require('gulp-javascript-obfuscator');
 
 
@@ -36,4 +37,10 @@ gulp.task('obfuscate', ['delete'], function () {
         .pipe(gulp.dest(dest('scripts')));
 });
 
-gulp.task('default', ['copylocales', 'copyimages', 'copymanifest', 'obfuscate']);
+gulp.task('zip', ['obfuscate'], function () {
+     gulp.src('./dest')
+        .pipe(zip('dist.zip'))
+        .pipe(gulp.dest('./'));
+});
+
+gulp.task('default', ['copylocales', 'copyimages', 'copymanifest', 'obfuscate', 'zip']);
