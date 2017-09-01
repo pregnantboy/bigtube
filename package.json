@@ -1,11 +1,11 @@
 {
   "name": "bigtube",
-  "version": "1.0.3",
+  "version": "2.0.0",
   "description": "Expands Youtube video to browser size",
   "scripts": {
-    "dist": "gulp"
+    "zip": "gulp"
   },
-  "dependencies": {
+  "devDependencies": {
     "gulp": "^3.9.1",
     "gulp-javascript-obfuscator": "^1.1.2",
     "gulp-zip": "^4.0.0",

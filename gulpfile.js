@@ -2,7 +2,8 @@ var gulp = require('gulp');
 var rimraf = require('rimraf');
 var zip = require('gulp-zip');
 var javascriptObfuscator = require('gulp-javascript-obfuscator');
-
+var archiver = require('archiver');
+var fs = require('fs');
 
 function dest(str) {
     if (str) {
@@ -16,31 +17,36 @@ gulp.task('delete', function (cb) {
     rimraf(dest(), cb);
 });
 
-gulp.task('copylocales', ['delete'], function () {
+gulp.task('copylocales', ['delete'], function (cb) {
     gulp.src('app/_locales/*/**')
-        .pipe(gulp.dest(dest('_locales')));
+        .pipe(gulp.dest(dest('_locales')))
+        .on('end', cb);
 });
 
-gulp.task('copyimages', ['delete'], function () {
+gulp.task('copyimages', ['delete'], function (cb) {
     gulp.src('app/images/*')
-        .pipe(gulp.dest(dest('images')));
+        .pipe(gulp.dest(dest('images')))
+        .on('end', cb);
 });
 
-gulp.task('copymanifest', ['delete'], function () {
+gulp.task('copymanifest', ['delete'], function (cb) {
     gulp.src('app/manifest.json')
-        .pipe(gulp.dest(dest()));
+        .pipe(gulp.dest(dest()))
+        .on('end', cb);
 });
 
-gulp.task('obfuscate', ['delete'], function () {
+gulp.task('obfuscate', ['delete'], function (cb) {
     gulp.src('app/scripts/*.js')
         .pipe(javascriptObfuscator())
-        .pipe(gulp.dest(dest('scripts')));
+        .pipe(gulp.dest(dest('scripts')))
+        .on('end', cb);
 });
 
-gulp.task('zip', ['obfuscate'], function () {
-     gulp.src('./dest')
-        .pipe(zip('dist.zip'))
-        .pipe(gulp.dest('./'));
+gulp.task('zip', ['copylocales', 'copyimages', 'copymanifest', 'obfuscate'], function (cb) {
+    gulp.src(dest('**/*'))
+        .pipe(zip('bigtube.zip'))
+        .pipe(gulp.dest('.'))
+        .on('end', cb);
 });
 
-gulp.task('default', ['copylocales', 'copyimages', 'copymanifest', 'obfuscate', 'zip']);
+gulp.task('default', ['zip']);
