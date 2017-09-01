@@ -1,36 +1,17 @@
 'use strict';
 
 var css = `
-.bigtube .watch-stage-mode #placeholder-player .player-api.player-width.player-height {
-  width: 100vw !important;
-  min-width: 1003px;
-  max-width: 100%;
-  height: 100vh !important;
-  left: -50vw;
-}
-
-.bigtube .watch-stage-mode #player-mole-container #player-api {
-  height: 100vh;
+.bigtube video.video-stream.html5-main-video {
   width: 100vw;
-  max-width: 100%;  
-  min-width: 1003px;
-  margin-left: 50vw;
-  left: -50vw;
+  height: 100vh;
+  left: 0;
+  top: 0px;
 }
 
-.bigtube #masthead-positioner-height-offset {
-  display: none;
+.bigtube ytd-watch[theater] #player.ytd-watch {
+  height: calc(100vh - 56px);
+  max-height: calc(100vh - 56px);
 }
-
-.bigtube #masthead-positioner {
-  opacity: 0;
-  transition-duration: 0.3s;
-}
-
-#masthead-positioner:hover {
-  opacity: 1;
-}
-
 
 .bigtube .watch-stage-mode #watch-appbar-playlist {
   margin-top: calc(100vh - 480px);
@@ -43,26 +24,26 @@ var css = `
 }`;
 
 var reloadCode = `
-                console.log('called reload');
+                console.log('called reload for page navigation and refresh');
                 if (!document.applyBigtube) {
                   document.applyBigtube = function() {
-                      if( !document.getElementById('page').classList.contains('watch-stage-mode')) {
-                        document.getElementById('body-container').classList.add('bigtube');
+                      if( !document.getElementsByTagName('ytd-watch')[0].hasAttribute("theater") ) {
+                        document.body.classList.add('bigtube');
                         window.dispatchEvent(new Event('resize')); 
                       } else {
-                        document.getElementById('body-container').classList.remove('bigtube');
+                        document.body.classList.remove('bigtube');
                       }
                       window.dispatchEvent(new Event('resize'));
                   } 
                 }
                 if (!document.changeTitle) {
                   document.changeTitle = function() {
-                    if( !document.getElementById('page').classList.contains('watch-stage-mode')) {
+                    if( !document.getElementsByTagName('ytd-watch')[0].hasAttribute("theater") ) {
                       document.getElementsByClassName('ytp-size-button')[0].title = 'Bigtube mode';
                     } 
                   }
                 }
-                document.getElementById('body-container').classList.add('bigtube');
+                document.body.classList.add('bigtube');
                 window.dispatchEvent(new Event('resize'));
                 document.getElementsByClassName('ytp-size-button')[0].removeEventListener("click", document.applyBigtube);
                 document.getElementsByClassName('ytp-size-button')[0].removeEventListener("mouseover", document.applyBigtube);
@@ -71,27 +52,26 @@ var reloadCode = `
               `;
 
 var staticCode = `
-                console.log('called static');
+                console.log('called static for button toggle');
                 if (!document.applyBigtube) {
                   document.applyBigtube = function() {
-                      if( !document.getElementById('page').classList.contains('watch-stage-mode')) {
-                        document.getElementById('body-container').classList.add('bigtube');
-                        window.dispatchEvent(new Event('resize')); 
+                      if( !document.getElementsByTagName('ytd-watch')[0].hasAttribute("theater") ) {
+                        document.body.classList.add('bigtube');
                       } else {
-                        document.getElementById('body-container').classList.remove('bigtube');
+                        document.body.classList.remove('bigtube');
                       }
                       window.dispatchEvent(new Event('resize'));
                   } 
                 }
                 if (!document.changeTitle) {
                   document.changeTitle = function() {
-                    if( !document.getElementById('page').classList.contains('watch-stage-mode')) {
+                    if( !document.getElementsByTagName('ytd-watch')[0].hasAttribute("theater") ) {
                       document.getElementsByClassName('ytp-size-button')[0].title = 'Bigtube mode';
                     } 
                   }
                 }
-                if( document.getElementById('page').classList.contains('watch-stage-mode')) {
-                  document.getElementById('body-container').classList.add('bigtube');
+                if( document.getElementsByTagName('ytd-watch')[0].hasAttribute("theater")) {
+                  document.body.classList.add('bigtube');
                   window.dispatchEvent(new Event('resize'));
                 } else {
                   document.getElementsByClassName('ytp-size-button')[0].title = 'Bigtube mode';
@@ -142,7 +122,7 @@ function isYoutubeVideo(tab) {
     return true;
   } else {
     chrome.tabs.executeScript(tab.id, {
-      code: "document.getElementById('body-container').classList.remove('bigtube');"
+      code: "document.body.classList.remove('bigtube');"
     });
     return false;
   }
@@ -157,6 +137,7 @@ function insertYoutubeCSS(tab, check) {
       chrome.tabs.insertCSS(tab.id, {
         code: css
       });
+      console.log('executing ', check ? 'static code' : 'reload code ');
       chrome.tabs.executeScript(tab.id, {
         code: check ? staticCode : reloadCode,
         runAt: "document_idle"
@@ -174,8 +155,8 @@ function removeYoutubeCSS(tab) {
           console.log(document.applyBigtube);
           document.getElementsByClassName('ytp-size-button')[0].removeEventListener("click", document.applyBigtube);
           document.getElementsByClassName('ytp-size-button')[0].removeEventListener("mouseover", document.changeTitle);
-          document.getElementById('body-container').classList.remove('bigtube');
-          if( !document.getElementById('page').classList.contains('watch-stage-mode')) {
+          document.body.classList.remove('bigtube');
+          if( !document.getElementsByTagName('ytd-watch')[0].hasAttribute("theater") ) {
             document.getElementsByClassName('ytp-size-button')[0].title = 'Cinema mode';            
           }
           window.dispatchEvent(new Event('resize'));
@@ -202,6 +183,17 @@ chrome.browserAction.onClicked.addListener(function (tab) {
       insertYoutubeCSS(tab, true);
     });
   });
+});
+
+// for refresh
+chrome.webNavigation.onDOMContentLoaded.addListener(function (details) {
+  if (details.frameId === 0) {
+    chrome.tabs.get(details.tabId, function (tab) {
+      if (tab.url === details.url) {
+        insertYoutubeCSS(tab, false);
+      }
+    });
+  };
 });
 
 chrome.webNavigation.onHistoryStateUpdated.addListener(function (details) {
