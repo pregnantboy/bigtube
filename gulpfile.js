@@ -2,8 +2,6 @@ var gulp = require('gulp');
 var rimraf = require('rimraf');
 var zip = require('gulp-zip');
 var javascriptObfuscator = require('gulp-javascript-obfuscator');
-var archiver = require('archiver');
-var fs = require('fs');
 
 function dest(str) {
     if (str) {
