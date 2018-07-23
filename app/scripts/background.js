@@ -1,20 +1,17 @@
 'use strict';
 
 var css = `
-.bigtube video.video-stream.html5-main-video {
-  width: 100vw;
-  height: 100vh;
-  left: 0;
-  top: 0px;
+@media (min-width: 857px) {
+  .bigtube .watch-stage-mode #watch-appbar-playlist {
+    margin-top: calc(100vh - 480px);
+  }
 }
 
-.bigtube ytd-watch[theater] #player.ytd-watch {
-  height: calc(100vh - 56px);
-  max-height: calc(100vh - 56px);
-}
-
-.bigtube .watch-stage-mode #watch-appbar-playlist {
-  margin-top: calc(100vh - 480px);
+@media (min-width: 882px) {
+  .bigtube ytd-watch:not([fullscreen])[theater] #player.ytd-watch {
+    height: calc(100vh - 56px);
+    max-height: calc(100vh - 56px);
+  }
 }
 
 @media screen and (min-height: 870px) and (min-width: 1320px) {
@@ -23,63 +20,45 @@ var css = `
   }
 }`;
 
+var declareFunctions = `
+  if (!document.applyBigtube) {
+    document.applyBigtube = function() {
+      document.body.classList.add('bigtube');
+      window.dispatchEvent(new Event('resize'));
+    }
+  }
+  if (!document.changeTitle) {
+    document.changeTitle = function() {
+      if( !document.getElementsByTagName('ytd-watch')[0].hasAttribute("theater") ) {
+        document.getElementsByClassName('ytp-size-button')[0].title = 'Bigtube!';
+      } 
+    }
+  }
+`;
+
+var setEventListeners = `
+  document.getElementsByClassName('ytp-size-button')[0].removeEventListener("click", document.applyBigtube);
+  document.getElementsByClassName('ytp-size-button')[0].removeEventListener("mouseover", document.applyBigtube);
+  document.getElementsByClassName('ytp-size-button')[0].addEventListener("click", document.applyBigtube);
+  document.getElementsByClassName('ytp-size-button')[0].addEventListener("mouseover", document.changeTitle);
+`;
+
 var reloadCode = `
-                console.log('called reload for page navigation and refresh');
-                if (!document.applyBigtube) {
-                  document.applyBigtube = function() {
-                      if( !document.getElementsByTagName('ytd-watch')[0].hasAttribute("theater") ) {
-                        document.body.classList.add('bigtube');
-                        window.dispatchEvent(new Event('resize')); 
-                      } else {
-                        document.body.classList.remove('bigtube');
-                      }
-                      window.dispatchEvent(new Event('resize'));
-                  } 
-                }
-                if (!document.changeTitle) {
-                  document.changeTitle = function() {
-                    if( !document.getElementsByTagName('ytd-watch')[0].hasAttribute("theater") ) {
-                      document.getElementsByClassName('ytp-size-button')[0].title = 'Bigtube mode';
-                    } 
-                  }
-                }
-                document.body.classList.add('bigtube');
-                window.dispatchEvent(new Event('resize'));
-                document.getElementsByClassName('ytp-size-button')[0].removeEventListener("click", document.applyBigtube);
-                document.getElementsByClassName('ytp-size-button')[0].removeEventListener("mouseover", document.applyBigtube);
-                document.getElementsByClassName('ytp-size-button')[0].addEventListener("click", document.applyBigtube);
-                document.getElementsByClassName('ytp-size-button')[0].addEventListener("mouseover", document.changeTitle);
+                console.log('Enabling bigtube for page navigation and refresh');
+                ${declareFunctions}
+                document.applyBigtube();
+                ${setEventListeners}
               `;
 
 var staticCode = `
-                console.log('called static for button toggle');
-                if (!document.applyBigtube) {
-                  document.applyBigtube = function() {
-                      if( !document.getElementsByTagName('ytd-watch')[0].hasAttribute("theater") ) {
-                        document.body.classList.add('bigtube');
-                      } else {
-                        document.body.classList.remove('bigtube');
-                      }
-                      window.dispatchEvent(new Event('resize'));
-                  } 
-                }
-                if (!document.changeTitle) {
-                  document.changeTitle = function() {
-                    if( !document.getElementsByTagName('ytd-watch')[0].hasAttribute("theater") ) {
-                      document.getElementsByClassName('ytp-size-button')[0].title = 'Bigtube mode';
-                    } 
-                  }
-                }
+                console.log('Enabling bigtube for button toggle');
+                ${declareFunctions}
                 if( document.getElementsByTagName('ytd-watch')[0].hasAttribute("theater")) {
-                  document.body.classList.add('bigtube');
-                  window.dispatchEvent(new Event('resize'));
+                  document.applyBigtube();
                 } else {
-                  document.getElementsByClassName('ytp-size-button')[0].title = 'Bigtube mode';
+                  document.changeTitle();
                 }
-                document.getElementsByClassName('ytp-size-button')[0].removeEventListener("click", document.applyBigtube);
-                document.getElementsByClassName('ytp-size-button')[0].removeEventListener("mouseover", document.changeTitle);
-                document.getElementsByClassName('ytp-size-button')[0].addEventListener("click", document.applyBigtube);
-                document.getElementsByClassName('ytp-size-button')[0].addEventListener("mouseover", document.changeTitle);
+                ${setEventListeners}
               `;
 
 var returnvalue = {};
@@ -88,14 +67,18 @@ function setCookie(value) {
   if (!value) {
     return;
   }
+  chrome.cookies.remove({
+    url:'https://www.youtube.com',
+    name: 'wide'
+  });
   chrome.cookies.set({
-    url: 'https://www.youtube.com',
+    url: 'https://youtube.com',
     name: 'wide',
     value: '1'
   });
 }
 
-function getToggle(callback) { // expects function(value){...}
+function getToggle(callback) {
   chrome.storage.local.get('toggle', function (data) {
     if (data.toggle === undefined) {
       callback(true); // default value
@@ -105,7 +88,7 @@ function getToggle(callback) { // expects function(value){...}
   });
 }
 
-function setToggle(value, callback) { // expects function(){...}
+function setToggle(value, callback) {
   chrome.storage.local.set({
     toggle: value
   }, function (t) {
@@ -151,8 +134,7 @@ function insertYoutubeCSS(tab, check) {
 function removeYoutubeCSS(tab) {
   chrome.tabs.executeScript(tab.id, {
     code: `
-          console.log('called remove');
-          console.log(document.applyBigtube);
+          console.log('Disabling bigtube');
           document.getElementsByClassName('ytp-size-button')[0].removeEventListener("click", document.applyBigtube);
           document.getElementsByClassName('ytp-size-button')[0].removeEventListener("mouseover", document.changeTitle);
           document.body.classList.remove('bigtube');
