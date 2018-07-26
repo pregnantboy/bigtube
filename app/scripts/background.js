@@ -74,7 +74,8 @@ function setCookie(value) {
   chrome.cookies.set({
     url: 'https://youtube.com',
     name: 'wide',
-    value: '1'
+    value: '1',
+    expirationDate: Date.now() + (365 * 24 * 60 * 60)
   });
 }
 
