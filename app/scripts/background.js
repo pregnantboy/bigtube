@@ -64,18 +64,11 @@ var staticCode = `
 var returnvalue = {};
 
 function setCookie(value) {
-  if (!value) {
-    return;
-  }
-  chrome.cookies.remove({
-    url:'https://www.youtube.com',
-    name: 'wide'
-  });
   chrome.cookies.set({
-    url: 'https://youtube.com',
+    url: 'https://www.youtube.com',
     name: 'wide',
-    value: '1',
-    expirationDate: Date.now() + (365 * 24 * 60 * 60)
+    value: value ? '1' : '0',
+    expirationDate: Math.round(Date.now() / 1000) + (365 * 24 * 60 * 60)
   });
 }
 
@@ -190,7 +183,8 @@ chrome.webNavigation.onHistoryStateUpdated.addListener(function (details) {
 });
 
 chrome.cookies.onChanged.addListener(function (changeInfo) {
-  if (changeInfo.cookie.domain.indexOf('youtube.com') !== -1 && changeInfo.cookie.name === 'wide' && changeInfo.cookie.value !== '1') {
-    getToggle(setCookie);
-  }
+  // deprecated for now
+  // if (changeInfo.cookie.domain.indexOf('youtube.com') !== -1 && changeInfo.cookie.name === 'wide' && changeInfo.cookie.value !== '1') {
+  //   getToggle(setCookie);
+  // }
 });
