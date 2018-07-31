@@ -8,7 +8,8 @@ var css = `
 }
 
 @media (min-width: 882px) {
-  .bigtube ytd-watch:not([fullscreen])[theater] #player.ytd-watch {
+  .bigtube ytd-watch:not([fullscreen])[theater] #player.ytd-watch, 
+  .bigtube ytd-watch-flexy:not([fullscreen])[theater] #player-theater-container.ytd-watch-flexy {
     height: calc(100vh - 56px);
     max-height: calc(100vh - 56px);
   }
@@ -20,6 +21,8 @@ var css = `
   }
 }`;
 
+// theater-requested_
+
 var declareFunctions = `
   if (!document.applyBigtube) {
     document.applyBigtube = function() {
@@ -29,7 +32,7 @@ var declareFunctions = `
   }
   if (!document.changeTitle) {
     document.changeTitle = function() {
-      if( !document.getElementsByTagName('ytd-watch')[0].hasAttribute("theater") ) {
+      if( document.getElementsByClassName('ytp-size-button')[0].title === 'Cinema mode') {
         document.getElementsByClassName('ytp-size-button')[0].title = 'Bigtube!';
       } 
     }
@@ -53,11 +56,8 @@ var reloadCode = `
 var staticCode = `
                 console.log('Enabling bigtube for button toggle');
                 ${declareFunctions}
-                if( document.getElementsByTagName('ytd-watch')[0].hasAttribute("theater")) {
-                  document.applyBigtube();
-                } else {
-                  document.changeTitle();
-                }
+                document.applyBigtube();
+                document.changeTitle();
                 ${setEventListeners}
               `;
 
@@ -106,6 +106,7 @@ function isYoutubeVideo(tab) {
 }
 
 function insertYoutubeCSS(tab, check) {
+  console.log("isyoutube", isYoutubeVideo(tab));
   if (!isYoutubeVideo(tab)) {
     return;
   }
@@ -132,7 +133,7 @@ function removeYoutubeCSS(tab) {
           document.getElementsByClassName('ytp-size-button')[0].removeEventListener("click", document.applyBigtube);
           document.getElementsByClassName('ytp-size-button')[0].removeEventListener("mouseover", document.changeTitle);
           document.body.classList.remove('bigtube');
-          if( !document.getElementsByTagName('ytd-watch')[0].hasAttribute("theater") ) {
+          if( document.getElementsByClassName('ytp-size-button')[0].title === 'Bigtube!' ) {
             document.getElementsByClassName('ytp-size-button')[0].title = 'Cinema mode';            
           }
           window.dispatchEvent(new Event('resize'));
