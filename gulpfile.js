@@ -1,7 +1,6 @@
 var gulp = require('gulp');
 var rimraf = require('rimraf');
 var zip = require('gulp-zip');
-var javascriptObfuscator = require('gulp-javascript-obfuscator');
 
 function dest(str) {
     if (str) {
@@ -35,7 +34,6 @@ gulp.task('copymanifest', ['delete'], function (cb) {
 
 gulp.task('obfuscate', ['delete'], function (cb) {
     gulp.src('app/scripts/*.js')
-        .pipe(javascriptObfuscator())
         .pipe(gulp.dest(dest('scripts')))
         .on('end', cb);
 });

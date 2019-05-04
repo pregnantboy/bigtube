@@ -7,7 +7,6 @@
   },
   "devDependencies": {
     "gulp": "^3.9.1",
-    "gulp-javascript-obfuscator": "^1.1.2",
     "gulp-zip": "^4.0.0",
     "rimraf": "^2.6.1"
   }
