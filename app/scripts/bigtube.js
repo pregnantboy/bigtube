@@ -183,9 +183,4 @@ chrome.webNavigation.onHistoryStateUpdated.addListener(function (details) {
   }
 });
 
-chrome.cookies.onChanged.addListener(function (changeInfo) {
-  // deprecated for now
-  // if (changeInfo.cookie.domain.indexOf('youtube.com') !== -1 && changeInfo.cookie.name === 'wide' && changeInfo.cookie.value !== '1') {
-  //   getToggle(setCookie);
-  // }
-});
+// 

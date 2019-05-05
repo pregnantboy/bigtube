@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Bigtube</title>
+    <style>
+        :root {
+            --primary-color: #e74c3c;
+        }
+
+        body {
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        }
+
+        .row {
+            display: flex;
+            align-items: center;
+            min-height: 40px;
+        }
+
+        span {
+            font-size: 16px;
+            margin-left: 10px;
+            display: block;
+        }
+
+        /* Checkbox */
+
+        .o-checkbox {
+            width: 30px;
+            position: relative;
+            margin-top: -10px;
+        }
+
+        .o-checkbox input[type=checkbox] {
+            visibility: hidden;
+        }
+
+        .o-checkbox input[type=checkbox]:checked+label:after {
+            opacity: 1;
+        }
+
+        .o-checkbox input[type=checkbox][disabled]+label {
+            background-color: #ddd;
+        }
+
+        .o-checkbox label {
+            width: 28px;
+            height: 28px;
+            cursor: pointer;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: #fbfffe;
+            border: 1px solid #d1d1d1;
+            border-radius: 4px;
+        }
+
+        .o-checkbox label:after {
+            content: '';
+            width: 15px;
+            height: 7px;
+            position: absolute;
+            top: 5px;
+            left: 4px;
+            border: 5px solid var(--primary-color);
+            border-top: none;
+            border-right: none;
+            background: transparent;
+            opacity: 0;
+            transform: rotate(-45deg);
+            color: var(--primary-color);
+        }
+
+        .o-checkbox label {
+            font-size: 20px;
+            line-height: 26px;
+        }
+
+        /* Radio Button */
+
+        .radio input[type="radio"]+label {
+            color: black;
+            position: relative;
+            display: flex;
+            margin-left: 6px;
+        }
+
+        .radio input[type="radio"]+label::before {
+            /* Outer Circle of radio button */
+            border: 1px solid grey;
+            content: ' ';
+            display: inline-block;
+            margin-right: 5px;
+            width: 17px;
+            height: 17px;
+            border-radius: 50%;
+            transition: border 0.15s ease-in-out;
+            cursor: pointer;
+        }
+
+        .radio input[type="radio"]+label::after {
+            /* Inner Circle of radio button */
+            border: 0px solid orange;
+            content: ' ';
+            background: transparent;
+            display: inline-block;
+            margin-right: 5px;
+            width: 11px;
+            height: 11px;
+            border-radius: 50%;
+            position: absolute;
+            left: 4px;
+            top: 4px;
+            transition: border 0.15s ease-in-out;
+            cursor: pointer;
+        }
+
+        input[type="radio"] {
+            display: none;
+        }
+
+        /* When button is active */
+        .radio input[type="radio"]:checked+label::after {
+            background: var(--primary-color);
+        }
+
+        .radio input[type="radio"]:checked+label::before {
+            border-color: var(--primary-color);
+        }
+
+        .radio input[type="radio"]:checked+label {
+            color: black;
+        }
+    </style>
+</head>
+
+<body>
+    <div style="padding: 0 10px 20px">
+        <span style="margin-left: 0">Use extension button for:</span>
+        <span style="margin-left: 0; font-size: 12px">(icon will still reflect bigtube status)</span>
+        <div class="row radio">
+            <input id="bigtube-button" type="radio" name="ext-button" checked="checked" />
+            <label for="bigtube-button"><span>Toggle Bigtube</span</label> 
+        </div>
+        <div class="row radio">
+            <input id="pip-button" type="radio" name="ext-button" checked="checked" />
+            <label for="pip-button"><span>Launching Picture-in-Picture</span></label>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="o-checkbox">
+                <input type="checkbox" id="bigtube-enable" name="bigtube-enable">
+                <label for="bigtube-enable"></label>
+            </div>
+            <label for="bigtube-enable"><span>Enable Bigtube</span></label>
+        </div>
+        <div class="row">
+            <div class="o-checkbox">
+                <input type="checkbox" id="pip-shortcut" name="pip-shortcut">
+                <label for="pip-shortcut"></label>
+            </div>
+            <label for="pip-shortcut"><span>Use (Ctrl/Cmd)+Shift+F for Picture-in-Picture</span></label>
+        </div>
+        <div class="row">
+            <div class="o-checkbox">
+                <input type="checkbox" id="twitch-messenger" name="twitch-messenger">
+                <label for="twitch-messenger"></label>
+            </div>
+            <label for="twitch-messenger"><span>Hide twitch.tv messenger button</span></label>
+        </div>
+    </div>
+</body>
+
+<script src="./options.js"></script>
+
+</html>

@@ -10,8 +10,13 @@
   },
   "background": {
     "scripts": [
-      "scripts/background.js"
+      "scripts/bigtube.js",
+      "scripts/pip.js"
     ]
+  },
+  "options_ui": {
+    "page": "options/options.html",
+    "open_in_tab": false
   },
   "default_locale": "en",
   "permissions": [
@@ -20,7 +25,7 @@
     "activeTab",
     "webNavigation",
     "cookies",
-    "*://*.youtube.com/*"
+    "<all_urls>"
   ],
   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
   "browser_action": {
