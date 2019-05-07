@@ -1,6 +1,6 @@
 'use strict';
 
-var css = `
+const css = `
 @media (min-width: 857px) {
   .bigtube .watch-stage-mode #watch-appbar-playlist {
     margin-top: calc(100vh - 480px);
@@ -23,7 +23,7 @@ var css = `
 
 // theater-requested_
 
-var declareFunctions = `
+const declareFunctions = `
   if (!document.applyBigtube) {
     document.applyBigtube = function() {
       document.body.classList.add('bigtube');
@@ -39,29 +39,27 @@ var declareFunctions = `
   }
 `;
 
-var setEventListeners = `
+const setEventListeners = `
   document.getElementsByClassName('ytp-size-button')[0].removeEventListener("click", document.applyBigtube);
   document.getElementsByClassName('ytp-size-button')[0].removeEventListener("mouseover", document.applyBigtube);
   document.getElementsByClassName('ytp-size-button')[0].addEventListener("click", document.applyBigtube);
   document.getElementsByClassName('ytp-size-button')[0].addEventListener("mouseover", document.changeTitle);
 `;
 
-var reloadCode = `
+const reloadCode = `
                 console.log('Enabling bigtube for page navigation and refresh');
                 ${declareFunctions}
                 document.applyBigtube();
                 ${setEventListeners}
               `;
 
-var staticCode = `
+const staticCode = `
                 console.log('Enabling bigtube for button toggle');
                 ${declareFunctions}
                 document.applyBigtube();
                 document.changeTitle();
                 ${setEventListeners}
               `;
-
-var returnvalue = {};
 
 function setCookie(value) {
   chrome.cookies.set({
@@ -73,19 +71,19 @@ function setCookie(value) {
 }
 
 function getToggle(callback) {
-  chrome.storage.local.get('toggle', function (data) {
-    if (data.toggle === undefined) {
+  chrome.storage.local.get(ENABLE_BIGTUBE, (data) => {
+    if (data[ENABLE_BIGTUBE] == undefined) {
       callback(true); // default value
     } else {
-      callback(data.toggle);
+      callback(data[ENABLE_BIGTUBE]);
     }
   });
 }
 
 function setToggle(value, callback) {
-  chrome.storage.local.set({
-    toggle: value
-  }, function (t) {
+  const newValue = {}
+  newValue[ENABLE_BIGTUBE] = value
+  chrome.storage.local.set(newValue, (t) => {
     if (chrome.runtime.lastError) {
       console.error(chrome.runtime.lastError);
     } else {
@@ -111,6 +109,7 @@ function insertYoutubeCSS(tab, check) {
     return;
   }
   getToggle(function (toggle) {
+    console.log(toggle)
     if (toggle) {
       chrome.tabs.insertCSS(tab.id, {
         code: css
@@ -143,7 +142,7 @@ function removeYoutubeCSS(tab) {
 }
 
 function setIcon(value) {
-  var path = (value) ? "images/icon-38.png" : "images/icon-disabled-38.png";
+  const path = value ? "images/icon-38.png" : "images/icon-disabled-38.png";
   chrome.browserAction.setIcon({
     path: path
   });
@@ -152,20 +151,40 @@ function setIcon(value) {
 getToggle(setIcon); // Initial state
 getToggle(setCookie);
 
-chrome.browserAction.onClicked.addListener(function (tab) {
-  getToggle(function (toggle) {
-    setToggle(!toggle, function () {
-      setIcon(!toggle);
-      setCookie(!toggle);
-      insertYoutubeCSS(tab, true);
+function isBigtubeBrowserAction(callback) {
+  chrome.storage.local.get(BROWSER_ACTION, function (data) {
+    if (data[BROWSER_ACTION] === "bigtube") {
+      callback()
+    }
+  })
+}
+
+chrome.browserAction.onClicked.addListener((tab) => {
+  isBigtubeBrowserAction(() => {
+    getToggle((toggle) => {
+      setToggle(!toggle, () => {
+        setIcon(!toggle);
+        setCookie(!toggle);
+        insertYoutubeCSS(tab, true);
+      });
     });
   });
 });
 
+chrome.storage.onChanged.addListener((changes) => {
+  if (changes[ENABLE_BIGTUBE]) {
+    const toggle = changes[ENABLE_BIGTUBE].newValue
+    setIcon(toggle);
+    setCookie(toggle);
+  }
+});
+
+
+
 // for refresh
-chrome.webNavigation.onDOMContentLoaded.addListener(function (details) {
+chrome.webNavigation.onDOMContentLoaded.addListener((details) => {
   if (details.frameId === 0) {
-    chrome.tabs.get(details.tabId, function (tab) {
+    chrome.tabs.get(details.tabId, (tab) => {
       if (tab.url === details.url) {
         insertYoutubeCSS(tab, false);
       }
@@ -173,14 +192,12 @@ chrome.webNavigation.onDOMContentLoaded.addListener(function (details) {
   };
 });
 
-chrome.webNavigation.onHistoryStateUpdated.addListener(function (details) {
+chrome.webNavigation.onHistoryStateUpdated.addListener((details) => {
   if (details.frameId === 0) {
-    chrome.tabs.get(details.tabId, function (tab) {
+    chrome.tabs.get(details.tabId, (tab) => {
       if (tab.url === details.url) {
         insertYoutubeCSS(tab, false);
       }
     });
   }
 });
-
-// 

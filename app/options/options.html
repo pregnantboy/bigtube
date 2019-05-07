@@ -6,10 +6,12 @@
     <style>
         :root {
             --primary-color: #e74c3c;
+            --secondary-color: #c24234;
         }
 
         body {
             font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            padding: 0 12px 10px;
         }
 
         .row {
@@ -132,46 +134,64 @@
         .radio input[type="radio"]:checked+label {
             color: black;
         }
+
+        .save-button {
+            background: var(--primary-color);
+            padding: 10px 20px;
+            border-radius: 4px;
+            border: none;
+            outline: none;
+            color: white;
+            cursor: pointer;
+            margin-left: auto;
+            margin-right: 0;
+            font-weight: 300;
+        }
+
+        .save-button:active {
+            background: var(--secondary-color);
+        }
     </style>
 </head>
 
 <body>
-    <div style="padding: 0 10px 20px">
-        <span style="margin-left: 0">Use extension button for:</span>
-        <span style="margin-left: 0; font-size: 12px">(icon will still reflect bigtube status)</span>
-        <div class="row radio">
-            <input id="bigtube-button" type="radio" name="ext-button" checked="checked" />
-            <label for="bigtube-button"><span>Toggle Bigtube</span</label> 
+    <span style="margin-left: 0">Use extension button to:</span>
+    <span style="margin-left: 0; font-size: 12px">(icon will still reflect bigtube status)</span>
+    <div class="row radio">
+        <input id="bigtube-button" type="radio" name="ext-button" />
+        <label for="bigtube-button"><span>Toggle Bigtube</span</label> </div> <div class="row radio">
+                <input id="pip-button" type="radio" name="ext-button" checked="checked" />
+                <label for="pip-button"><span>Launch Picture-in-Picture</span></label>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="o-checkbox">
+            <input type="checkbox" id="bigtube-enable" name="bigtube-enable">
+            <label for="bigtube-enable"></label>
         </div>
-        <div class="row radio">
-            <input id="pip-button" type="radio" name="ext-button" checked="checked" />
-            <label for="pip-button"><span>Launching Picture-in-Picture</span></label>
+        <label for="bigtube-enable"><span>Enable Bigtube</span></label>
+    </div>
+    <div class="row">
+        <div class="o-checkbox">
+            <input type="checkbox" id="pip-shortcut" name="pip-shortcut">
+            <label for="pip-shortcut"></label>
         </div>
-        <hr>
-        <div class="row">
-            <div class="o-checkbox">
-                <input type="checkbox" id="bigtube-enable" name="bigtube-enable">
-                <label for="bigtube-enable"></label>
-            </div>
-            <label for="bigtube-enable"><span>Enable Bigtube</span></label>
+        <label for="pip-shortcut"><span>Use (Ctrl/Cmd)+Shift+F for Picture-in-Picture</span></label>
+    </div>
+    <div class="row">
+        <div class="o-checkbox">
+            <input type="checkbox" id="twitch-whispers" name="twitch-whispers">
+            <label for="twitch-whispers"></label>
         </div>
-        <div class="row">
-            <div class="o-checkbox">
-                <input type="checkbox" id="pip-shortcut" name="pip-shortcut">
-                <label for="pip-shortcut"></label>
-            </div>
-            <label for="pip-shortcut"><span>Use (Ctrl/Cmd)+Shift+F for Picture-in-Picture</span></label>
-        </div>
-        <div class="row">
-            <div class="o-checkbox">
-                <input type="checkbox" id="twitch-messenger" name="twitch-messenger">
-                <label for="twitch-messenger"></label>
-            </div>
-            <label for="twitch-messenger"><span>Hide twitch.tv messenger button</span></label>
-        </div>
+        <label for="twitch-whispers"><span>Hide twitch.tv whispers button</span></label>
+    </div>
+    <hr>
+    <div class="row">
+        <button class="save-button">Save</button>
     </div>
 </body>
 
+<script src="../constants/storage-keys.js"></script>
 <script src="./options.js"></script>
 
 </html>

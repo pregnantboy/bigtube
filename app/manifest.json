@@ -10,6 +10,7 @@
   },
   "background": {
     "scripts": [
+      "constants/storage-keys.js",
       "scripts/bigtube.js",
       "scripts/pip.js"
     ]
