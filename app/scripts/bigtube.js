@@ -23,42 +23,27 @@ const css = `
 
 // theater-requested_
 
-const declareFunctions = `
-  if (!document.applyBigtube) {
-    document.applyBigtube = function() {
-      document.body.classList.add('bigtube');
-      window.dispatchEvent(new Event('resize'));
-    }
-  }
-  if (!document.changeTitle) {
-    document.changeTitle = function() {
-      if( document.getElementsByClassName('ytp-size-button')[0].title === 'Cinema mode') {
-        document.getElementsByClassName('ytp-size-button')[0].title = 'Bigtube!';
-      } 
-    }
-  }
+const applyBigtube = `
+  document.querySelector('ytd-app').classList.add('bigtube');
+  window.dispatchEvent(new Event('resize'));
 `;
 
-const setEventListeners = `
-  document.getElementsByClassName('ytp-size-button')[0].removeEventListener("click", document.applyBigtube);
-  document.getElementsByClassName('ytp-size-button')[0].removeEventListener("mouseover", document.applyBigtube);
-  document.getElementsByClassName('ytp-size-button')[0].addEventListener("click", document.applyBigtube);
-  document.getElementsByClassName('ytp-size-button')[0].addEventListener("mouseover", document.changeTitle);
+const changeBigtubeTitle = `
+  if (!window.changeBigtubeTitle) {
+    window.changeBigtubeTitle = function() {
+      let newTitle = document.getElementsByClassName('ytp-size-button')[0].title.replace('Cinema', 'Bigtube');
+      document.getElementsByClassName('ytp-size-button')[0].title = newTitle;
+    }
+  }
+  window.changeBigtubeTitle();
+  document.querySelector('ytd-app').removeEventListener('yt-set-theater-mode-enabled', window.changeBigtubeTitle);
+  document.querySelector('ytd-app').addEventListener('yt-set-theater-mode-enabled', window.changeBigtubeTitle);
 `;
 
-const reloadCode = `
-                console.log('Enabling bigtube for page navigation and refresh');
-                ${declareFunctions}
-                document.applyBigtube();
-                ${setEventListeners}
-              `;
-
-const staticCode = `
-                console.log('Enabling bigtube for button toggle');
-                ${declareFunctions}
-                document.applyBigtube();
-                document.changeTitle();
-                ${setEventListeners}
+const code = `
+                console.log('Applying Bigtube')
+                ${applyBigtube}
+                ${changeBigtubeTitle}
               `;
 
 function setCookie(value) {
@@ -70,15 +55,17 @@ function setCookie(value) {
   });
 }
 
-function getToggle(callback) {
-  chrome.storage.local.get(ENABLE_BIGTUBE, (data) => {
-    if (data[ENABLE_BIGTUBE] == undefined) {
-      callback(true); // default value
-    } else {
-      callback(data[ENABLE_BIGTUBE]);
-    }
-  });
-}
+let isBigtubeEnabled = true;
+let isBigtubeBrowserAction = false;
+
+chrome.storage.local.get([ENABLE_BIGTUBE, BROWSER_ACTION], (data) => {
+  if (data[ENABLE_BIGTUBE] != undefined) {
+    isBigtubeEnabled = data[ENABLE_BIGTUBE];
+  }
+  if (data[BROWSER_ACTION] != undefined) {
+    isBigtubeBrowserAction = data[BROWSER_ACTION] === 'bigtube'
+  }
+});
 
 function setToggle(value, callback) {
   const newValue = {}
@@ -92,50 +79,30 @@ function setToggle(value, callback) {
   });
 }
 
-function isYoutubeVideo(tab) {
-  if (tab.url.match(/^http?s\:\/\/(www\.)?youtube\.com\/watch\?/)) {
-    return true;
-  } else {
-    chrome.tabs.executeScript(tab.id, {
-      code: "document.body.classList.remove('bigtube');"
+function insertYoutubeCSS() {
+  if (isBigtubeEnabled) {
+    chrome.tabs.insertCSS({
+      code: css
     });
-    return false;
+    chrome.tabs.executeScript({
+      code,
+      runAt: "document_idle"
+    });
+  } else {
+    removeYoutubeCSS();
   }
 }
 
-function insertYoutubeCSS(tab, check) {
-  console.log("isyoutube", isYoutubeVideo(tab));
-  if (!isYoutubeVideo(tab)) {
-    return;
-  }
-  getToggle(function (toggle) {
-    console.log(toggle)
-    if (toggle) {
-      chrome.tabs.insertCSS(tab.id, {
-        code: css
-      });
-      console.log('executing ', check ? 'static code' : 'reload code ');
-      chrome.tabs.executeScript(tab.id, {
-        code: check ? staticCode : reloadCode,
-        runAt: "document_idle"
-      });
-    } else {
-      removeYoutubeCSS(tab);
-    }
-  });
-}
-
-function removeYoutubeCSS(tab) {
-  chrome.tabs.executeScript(tab.id, {
+function removeYoutubeCSS() {
+  chrome.tabs.executeScript({
     code: `
           console.log('Disabling bigtube');
-          document.getElementsByClassName('ytp-size-button')[0].removeEventListener("click", document.applyBigtube);
-          document.getElementsByClassName('ytp-size-button')[0].removeEventListener("mouseover", document.changeTitle);
-          document.body.classList.remove('bigtube');
-          if( document.getElementsByClassName('ytp-size-button')[0].title === 'Bigtube!' ) {
-            document.getElementsByClassName('ytp-size-button')[0].title = 'Cinema mode';            
-          }
+          document.querySelector('ytd-app').classList.remove('bigtube');
           window.dispatchEvent(new Event('resize'));
+          if (window.changeBigtubeTitle) {
+            document.querySelector('ytd-app').removeEventListener('yt-set-theater-mode-enabled', window.changeBigtubeTitle);
+          }
+          document.getElementsByClassName('ytp-size-button')[0].title = document.getElementsByClassName('ytp-size-button')[0].title.replace('Bigtube', 'Cinema');
           `,
     runAt: "document_idle"
   });
@@ -148,56 +115,59 @@ function setIcon(value) {
   });
 }
 
-getToggle(setIcon); // Initial state
-getToggle(setCookie);
+setIcon(isBigtubeEnabled); // Initial state
+setCookie(isBigtubeEnabled);
 
-function isBigtubeBrowserAction(callback) {
-  chrome.storage.local.get(BROWSER_ACTION, function (data) {
-    if (data[BROWSER_ACTION] === "bigtube") {
-      callback()
-    }
-  })
-}
 
 chrome.browserAction.onClicked.addListener((tab) => {
-  isBigtubeBrowserAction(() => {
-    getToggle((toggle) => {
-      setToggle(!toggle, () => {
-        setIcon(!toggle);
-        setCookie(!toggle);
-        insertYoutubeCSS(tab, true);
-      });
-    });
+  if (!isBigtubeBrowserAction) {
+    return
+  }
+  console.log('bigtube', isBigtubeEnabled)
+  isBigtubeEnabled = !isBigtubeEnabled;
+  setToggle(isBigtubeEnabled, () => {
+    setIcon(isBigtubeEnabled);
+    setCookie(isBigtubeEnabled);
+    insertYoutubeCSS(tab);
   });
 });
 
 chrome.storage.onChanged.addListener((changes) => {
+  console.log(changes)
   if (changes[ENABLE_BIGTUBE]) {
-    const toggle = changes[ENABLE_BIGTUBE].newValue
-    setIcon(toggle);
-    setCookie(toggle);
+    isBigtubeEnabled = changes[ENABLE_BIGTUBE].newValue
+    setIcon(isBigtubeEnabled);
+    setCookie(isBigtubeEnabled);
+  }
+  if (changes[BROWSER_ACTION]) {
+    isBigtubeBrowserAction = changes[BROWSER_ACTION].newValue === 'bigtube'
   }
 });
-
-
 
 // for refresh
 chrome.webNavigation.onDOMContentLoaded.addListener((details) => {
-  if (details.frameId === 0) {
-    chrome.tabs.get(details.tabId, (tab) => {
-      if (tab.url === details.url) {
-        insertYoutubeCSS(tab, false);
-      }
-    });
-  };
-});
-
-chrome.webNavigation.onHistoryStateUpdated.addListener((details) => {
-  if (details.frameId === 0) {
-    chrome.tabs.get(details.tabId, (tab) => {
-      if (tab.url === details.url) {
-        insertYoutubeCSS(tab, false);
-      }
-    });
+  if (!isBigtubeEnabled) {
+    return;
   }
-});
+  if (details.frameId === 0) {
+    insertYoutubeCSS();
+  };
+}, {
+    url: [
+      { hostSuffix: '.youtube.com' }
+    ]
+  });
+
+// // For navigation
+// chrome.webNavigation.onHistoryStateUpdated.addListener((details) => {
+//   if (!isBigtubeEnabled) {
+//     return;
+//   }
+//   if (details.frameId === 0) {
+//     chrome.tabs.get(details.tabId, (tab) => {
+//       if (tab.url === details.url) {
+//         insertYoutubeCSS(tab, false);
+//       }
+//     });
+//   }
+// });

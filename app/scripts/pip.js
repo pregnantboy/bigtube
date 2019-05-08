@@ -2,7 +2,7 @@ function launchPip() {
     if (!document.pictureInPictureEnabled) {
         return;
     }
-    var videos = Array.from(document.getElementsByTagName("video"));
+    const videos = Array.from(document.querySelectorAll("video"));
     if (!videos.length) {
         return;
     }
@@ -12,23 +12,34 @@ function launchPip() {
         document.body.removeAttribute("its-pipping");
     }
 
-    var video = videos[0]
+    let video = videos[0]
 
     function percentageOfVideoInViewport(video) {
-        var viewportHeight = window.innerHeight,
-            scrollTop = window.scrollY,
-            boundingRect = video.getBoundingClientRect(),
-            elementOffsetTop = boundingRect.top,
-            elementHeight = boundingRect.height;
+        const viewportHeight = window.innerHeight;
+        const boundingRect = video.getBoundingClientRect();
+        const elementOffsetTop = boundingRect.top;
+        const elementOffsetBottom = viewportHeight - boundingRect.bottom;
+        const elementHeight = boundingRect.height;
 
-        if (elementOffsetTop > (scrollTop + viewportHeight)) {
-            return 0;
-        } else if ((elementOffsetTop + elementHeight) < scrollTop) {
-            return 100;
+        if (elementOffsetTop <= 0) {
+            // element begins before start of viewport
+            if ((elementOffsetTop + elementHeight) <= 0) {
+                // element is completely above viewport
+                return 0;
+            } else {
+                // element is partially above viewport
+                // return 100 if partial video takes up entire screen
+                return Math.min((elementOffsetTop + elementHeight), viewportHeight) / Math.min(elementHeight, viewportHeight) * 100
+            }
         } else {
-            var distance = (scrollTop + viewportHeight) - elementOffsetTop;
-            var percentage = distance / ((viewportHeight + elementHeight) / 100);
-            return percentage;
+            // element begins after start of viewport
+            if (elementOffsetTop > viewportHeight) {
+                // element begins after end of viewport
+                return 0;
+            } else {
+                // element starts somewhere in the viewport
+                return (viewportHeight - elementOffsetTop - Math.max(elementOffsetBottom, 0)) / Math.min(elementHeight, viewportHeight) * 100
+            }
         }
     }
 
@@ -40,10 +51,8 @@ function launchPip() {
             if (difference !== 0) {
                 return difference;
             } else {
-                // if equal, sort according to size
-                var aRect = a.getBoundingClientRect();
-                var bRect = b.getBoundingClientRect();
-                return (b.height * b.width) - (a.height * a.width);
+                // if equal visibility, sort according to size
+                return (b.clientHeight * b.clientWidth) - (a.clientHeight * a.clientWidth);
             }
         });
         video = videos[0];
@@ -54,23 +63,35 @@ function launchPip() {
         video.disablePictureInPicture = false;
     }
 
-    video.requestPictureInPicture();
-    document.body.setAttribute("its-pipping", true)
+    try {
+        video.requestPictureInPicture();
+        document.body.setAttribute("its-pipping", true);
+    } catch (e) {
+        console.log(e)
+    }
 }
 
+let isPipBrowserAction = true
+chrome.storage.local.get(BROWSER_ACTION, function (data) {
+    if (data[BROWSER_ACTION] && data[BROWSER_ACTION] !== "pip") {
+        isPipBrowserAction = false;
+    }
+});
 
-function isPipBrowserAction(callback) {
-    chrome.storage.local.get(BROWSER_ACTION, function (data) {
-        if (!data[BROWSER_ACTION] || data[BROWSER_ACTION] === "pip") {
-            callback();
-        }
-    });
-}
+chrome.storage.onChanged.addListener((changes) => {
+    if (changes[BROWSER_ACTION]) {
+        const newValue = changes[BROWSER_ACTION].newValue;
+        isPipBrowserAction = (newValue === 'pip' || newValue == undefined)
+    }
+});
+
 
 chrome.browserAction.onClicked.addListener((tab) => {
-    isPipBrowserAction(() => {
+    if (isPipBrowserAction) {
+        console.log('pip')
         chrome.tabs.executeScript(tab.id, {
-            code: `(${launchPip.toString()})()`
+            code: `(${launchPip.toString()})()`,
+            allFrames: true
         });
-    });
+    }
 });
