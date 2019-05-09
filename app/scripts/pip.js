@@ -72,9 +72,13 @@ function launchPip() {
 }
 
 let isPipBrowserAction = true
-chrome.storage.local.get(BROWSER_ACTION, function (data) {
+let usePipKeyboardShortcut = true
+chrome.storage.local.get([BROWSER_ACTION, PIP_SHORTCUT], function (data) {
     if (data[BROWSER_ACTION] && data[BROWSER_ACTION] !== "pip") {
         isPipBrowserAction = false;
+    }
+    if (data[PIP_SHORTCUT] === false) {
+        usePipKeyboardShortcut = false;
     }
 });
 
@@ -83,13 +87,24 @@ chrome.storage.onChanged.addListener((changes) => {
         const newValue = changes[BROWSER_ACTION].newValue;
         isPipBrowserAction = (newValue === 'pip' || newValue == undefined);
     }
+    if (changes[PIP_SHORTCUT]) {
+        const newValue = changes[PIP_SHORTCUT].newValue;
+        usePipKeyboardShortcut = newValue !== false;
+    }
 });
 
-
-chrome.browserAction.onClicked.addListener((tab) => {
+chrome.browserAction.onClicked.addListener(() => {
     if (isPipBrowserAction) {
-        console.log('pip')
-        chrome.tabs.executeScript(tab.id, {
+        chrome.tabs.executeScript({
+            code: `(${launchPip.toString()})()`,
+            allFrames: true
+        });
+    }
+});
+
+chrome.commands.onCommand.addListener(function (command) {
+    if (usePipKeyboardShortcut && command === 'toggle-pip') {
+        chrome.tabs.executeScript({
             code: `(${launchPip.toString()})()`,
             allFrames: true
         });

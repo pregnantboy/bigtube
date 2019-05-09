@@ -1,6 +1,6 @@
 {
   "name": "bigtube",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Expands Youtube video to browser size",
   "scripts": {
     "zip": "gulp"

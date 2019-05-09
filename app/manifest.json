@@ -1,7 +1,7 @@
 {
   "name": "__MSG_appName__",
   "short_name": "BigTube",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "manifest_version": 2,
   "description": "__MSG_appDescription__",
   "icons": {
@@ -11,6 +11,7 @@
   "background": {
     "scripts": [
       "constants/storage-keys.js",
+      "scripts/main.js",
       "scripts/bigtube.js",
       "scripts/pip.js",
       "scripts/twitch.js"
@@ -29,6 +30,15 @@
     "cookies",
     "<all_urls>"
   ],
+  "commands": {
+    "toggle-pip": {
+      "suggested_key": {
+        "default": "Ctrl+B",
+        "mac": "Command+B"
+      },
+      "description": "Toggle Picture-in-Picture"
+    }
+  },
   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
   "browser_action": {
     "default_icon": {},
