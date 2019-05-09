@@ -1,7 +1,7 @@
 {
   "name": "__MSG_appName__",
   "short_name": "BigTube",
-  "version": "2.1.3",
+  "version": "3.0.0",
   "manifest_version": 2,
   "description": "__MSG_appDescription__",
   "icons": {
@@ -10,8 +10,15 @@
   },
   "background": {
     "scripts": [
-      "scripts/background.js"
+      "constants/storage-keys.js",
+      "scripts/bigtube.js",
+      "scripts/pip.js",
+      "scripts/twitch.js"
     ]
+  },
+  "options_ui": {
+    "page": "options/options.html",
+    "open_in_tab": false
   },
   "default_locale": "en",
   "permissions": [
@@ -20,7 +27,7 @@
     "activeTab",
     "webNavigation",
     "cookies",
-    "*://*.youtube.com/*"
+    "<all_urls>"
   ],
   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
   "browser_action": {
