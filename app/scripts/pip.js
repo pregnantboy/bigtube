@@ -29,7 +29,7 @@ function launchPip() {
             } else {
                 // element is partially above viewport
                 // return 100 if partial video takes up entire screen
-                return Math.min((elementOffsetTop + elementHeight), viewportHeight) / Math.min(elementHeight, viewportHeight) * 100
+                return Math.min((elementOffsetTop + elementHeight), viewportHeight) / Math.min(elementHeight, viewportHeight) * 100;
             }
         } else {
             // element begins after start of viewport
@@ -38,7 +38,7 @@ function launchPip() {
                 return 0;
             } else {
                 // element starts somewhere in the viewport
-                return (viewportHeight - elementOffsetTop - Math.max(elementOffsetBottom, 0)) / Math.min(elementHeight, viewportHeight) * 100
+                return (viewportHeight - elementOffsetTop - Math.max(elementOffsetBottom, 0)) / Math.min(elementHeight, viewportHeight) * 100;
             }
         }
     }
@@ -67,7 +67,7 @@ function launchPip() {
         video.requestPictureInPicture();
         document.body.setAttribute("its-pipping", true);
     } catch (e) {
-        console.log(e)
+        console.log(e);
     }
 }
 
@@ -81,7 +81,7 @@ chrome.storage.local.get(BROWSER_ACTION, function (data) {
 chrome.storage.onChanged.addListener((changes) => {
     if (changes[BROWSER_ACTION]) {
         const newValue = changes[BROWSER_ACTION].newValue;
-        isPipBrowserAction = (newValue === 'pip' || newValue == undefined)
+        isPipBrowserAction = (newValue === 'pip' || newValue == undefined);
     }
 });
 

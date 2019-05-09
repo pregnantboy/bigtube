@@ -68,8 +68,8 @@ chrome.storage.local.get([ENABLE_BIGTUBE, BROWSER_ACTION], (data) => {
 });
 
 function setToggle(value, callback) {
-  const newValue = {}
-  newValue[ENABLE_BIGTUBE] = value
+  const newValue = {};
+  newValue[ENABLE_BIGTUBE] = value;
   chrome.storage.local.set(newValue, (t) => {
     if (chrome.runtime.lastError) {
       console.error(chrome.runtime.lastError);
@@ -121,7 +121,7 @@ setCookie(isBigtubeEnabled);
 
 chrome.browserAction.onClicked.addListener((tab) => {
   if (!isBigtubeBrowserAction) {
-    return
+    return;
   }
   console.log('bigtube', isBigtubeEnabled)
   isBigtubeEnabled = !isBigtubeEnabled;
@@ -133,14 +133,13 @@ chrome.browserAction.onClicked.addListener((tab) => {
 });
 
 chrome.storage.onChanged.addListener((changes) => {
-  console.log(changes)
   if (changes[ENABLE_BIGTUBE]) {
     isBigtubeEnabled = changes[ENABLE_BIGTUBE].newValue
     setIcon(isBigtubeEnabled);
     setCookie(isBigtubeEnabled);
   }
   if (changes[BROWSER_ACTION]) {
-    isBigtubeBrowserAction = changes[BROWSER_ACTION].newValue === 'bigtube'
+    isBigtubeBrowserAction = changes[BROWSER_ACTION].newValue === 'bigtube';
   }
 });
 
