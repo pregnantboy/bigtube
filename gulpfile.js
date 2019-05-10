@@ -38,6 +38,16 @@ gulp.task('copyoptions', ['delete'], function (cb) {
         .on('end', cb);
 });
 
+gulp.task('copyconstants', ['delete'], function (cb) {
+    gulp.src('app/constants/*')
+        .pipe(babel({
+            presets: ['@babel/env'],
+            comments: false
+        }))
+        .pipe(gulp.dest(dest('constants')))
+        .on('end', cb);
+});
+
 gulp.task('copymanifest', ['delete'], function (cb) {
     gulp.src('app/manifest.json')
         .pipe(gulp.dest(dest()))
@@ -54,7 +64,7 @@ gulp.task('babelify', ['delete'], function (cb) {
         .on('end', cb);
 });
 
-gulp.task('zip', ['copylocales', 'copyimages', 'copymanifest', 'copyoptions', 'babelify'], function (cb) {
+gulp.task('zip', ['copylocales', 'copyimages', 'copymanifest', 'copyoptions', 'copyconstants', 'babelify'], function (cb) {
     gulp.src(dest('**/*'))
         .pipe(zip('bigtube.zip'))
         .pipe(gulp.dest('.'))

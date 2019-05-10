@@ -79,22 +79,22 @@ function setToggle(value, callback) {
   });
 }
 
-function insertYoutubeCSS() {
+function insertYoutubeCSS(tab) {
   if (isBigtubeEnabled) {
-    chrome.tabs.insertCSS({
+    chrome.tabs.insertCSS(tab.id, {
       code: css
     });
-    chrome.tabs.executeScript({
+    chrome.tabs.executeScript(tab.id, {
       code,
       runAt: "document_idle"
     });
   } else {
-    removeYoutubeCSS();
+    removeYoutubeCSS(tab);
   }
 }
 
-function removeYoutubeCSS() {
-  chrome.tabs.executeScript({
+function removeYoutubeCSS(tab) {
+  chrome.tabs.executeScript(tab.id, {
     code: `
           console.log('Disabling bigtube');
           document.querySelector('ytd-app').classList.remove('bigtube');
@@ -149,7 +149,9 @@ chrome.webNavigation.onDOMContentLoaded.addListener((details) => {
     return;
   }
   if (details.frameId === 0) {
-    insertYoutubeCSS();
+    chrome.tabs.get(details.tabId, (tab) => {
+      insertYoutubeCSS(tab);
+    });
   };
 }, {
     url: [
