@@ -22,10 +22,10 @@ chrome.storage.onChanged.addListener((changes) => {
     }
 });
 
-chrome.webNavigation.onDOMContentLoaded.addListener(() => {
+chrome.webNavigation.onDOMContentLoaded.addListener((details) => {
     console.log('hide twitch whispers?', isTwitchEnabled);
     if (isTwitchEnabled) {
-        chrome.tabs.insertCSS({
+        chrome.tabs.insertCSS(details.tabId, {
             code: twitchCss
         });
     }
