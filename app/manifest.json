@@ -1,7 +1,7 @@
 {
   "name": "__MSG_appName__",
   "short_name": "BigTube",
-  "version": "3.0.4",
+  "version": "3.0.5",
   "manifest_version": 2,
   "description": "__MSG_appDescription__",
   "icons": {
@@ -33,8 +33,8 @@
   "commands": {
     "toggle-pip": {
       "suggested_key": {
-        "default": "Ctrl+B",
-        "mac": "Command+B"
+        "default": "Ctrl+Shift+L",
+        "mac": "Command+Shift+L"
       },
       "description": "Toggle Picture-in-Picture"
     }
