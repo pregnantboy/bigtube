@@ -13,8 +13,7 @@
       "constants/storage-keys.js",
       "scripts/main.js",
       "scripts/bigtube.js",
-      "scripts/pip.js",
-      "scripts/twitch.js"
+      "scripts/pip.js"
     ]
   },
   "options_ui": {
