@@ -1,46 +1,39 @@
 {
-  "name": "__MSG_appName__",
+  "name": "BigTube - Youtube Expander and Video Popout",
   "short_name": "BigTube",
-  "version": "3.0.6",
-  "manifest_version": 2,
-  "description": "__MSG_appDescription__",
+  "version": "4.0.0",
+  "manifest_version": 3,
+  "description": "Expand your YouTube video player without going fullscreen. Launch Picture-in-Picture on all video sites.",
   "icons": {
     "16": "images/icon-16.png",
     "128": "images/icon-128.png"
   },
   "background": {
-    "scripts": [
-      "constants/storage-keys.js",
-      "scripts/main.js",
-      "scripts/bigtube.js",
-      "scripts/pip.js"
-    ]
+    "service_worker": "scripts/main.js",
+    "type": "module"
   },
   "options_ui": {
     "page": "options/options.html",
     "open_in_tab": false
   },
-  "default_locale": "en",
-  "permissions": [
-    "storage",
-    "tabs",
-    "activeTab",
-    "webNavigation",
-    "cookies",
-    "<all_urls>"
-  ],
-  "commands": {
-    "toggle-pip": {
-      "suggested_key": {
-        "default": "Ctrl+Shift+L",
-        "mac": "Command+Shift+L"
-      },
-      "description": "Toggle Picture-in-Picture"
+  "action": {
+    "default_icon": {
+      "16": "images/icon-16.png",
+      "19": "images/icon-19.png",
+      "38": "images/icon-38.png",
+      "128": "images/icon-128.png"
     }
   },
-  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
-  "browser_action": {
-    "default_icon": {},
-    "default_title": "Bigtube"
-  }
+  "commands": {
+    "_execute_action": {
+      "suggested_key": {
+        "windows": "Alt+Shift+P",
+        "mac": "Alt+Shift+P",
+        "chromeos": "Alt+Shift+P",
+        "linux": "Alt+Shift+P"
+      }
+    }
+  },
+  "permissions": ["storage", "activeTab", "scripting", "cookies"],
+  "host_permissions": ["*://*/*"]
 }

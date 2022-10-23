@@ -1,0 +1,21 @@
+@media (min-width: 857px) {
+  ytd-app .watch-stage-mode #watch-appbar-playlist {
+    margin-top: calc(100vh - 480px);
+  }
+}
+
+@media (min-width: 882px) {
+  ytd-app ytd-watch:not([fullscreen])[theater] #player.ytd-watch,
+  ytd-app
+    ytd-watch-flexy:not([fullscreen])[theater]
+    #player-theater-container.ytd-watch-flexy {
+    height: calc(100vh - 56px);
+    max-height: calc(100vh - 56px);
+  }
+}
+
+@media screen and (min-height: 870px) and (min-width: 1320px) {
+  ytd-app .watch-stage-mode #watch-appbar-playlist {
+    margin-top: calc(100vh - 720px);
+  }
+}
