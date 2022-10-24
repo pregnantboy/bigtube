@@ -1,19 +1,18 @@
 {
   "name": "bigtube",
-  "version": "3.0.6",
+  "version": "4.0.0",
   "description": "Expands Youtube video to browser size",
   "scripts": {
-    "chrome": "gulp",
-    "firefox": "gulp build && web-ext build -s ./dest --overwrite-dest",
-    "firefox-test": "gulp build && web-ext run -s ./dest"
+    "build:chrome": "node build.mjs --browser=chrome",
+    "build:firefox": "node build.mjs --browser=firefox"
   },
   "devDependencies": {
-    "@babel/core": "^7.14.6",
-    "@babel/preset-env": "^7.14.7",
-    "gulp": "^4.0.2",
-    "gulp-babel": "^8.0.0",
-    "gulp-zip": "^4.0.0",
+    "@parcel/config-default": "^2.7.0",
+    "@parcel/core": "^2.7.0",
+    "archiver": "^5.3.1",
+    "copyfiles": "^2.4.1",
+    "minimist": "^1.2.7",
     "rimraf": "^3.0.2",
-    "web-ext": "^6.2.0"
+    "web-ext": "^7.3.1"
   }
 }
