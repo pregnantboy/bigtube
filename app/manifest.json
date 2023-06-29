@@ -1,7 +1,7 @@
 {
   "name": "BigTube - Youtube Expander and Video Popout",
   "short_name": "BigTube",
-  "version": "4.0.0",
+  "version": "4.1.0",
   "manifest_version": 3,
   "description": "Expand your YouTube video player without going fullscreen. Launch Picture-in-Picture on all video sites.",
   "icons": {

@@ -1,6 +1,6 @@
 {
   "name": "bigtube",
-  "version": "4.0.0",
+  "version": "4.1.0",
   "description": "Expands Youtube video to browser size",
   "scripts": {
     "build:chrome": "node build.mjs --browser=chrome",

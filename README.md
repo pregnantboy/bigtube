@@ -9,9 +9,12 @@ Chrome Extension that expands Youtube videos to browser size.
 
 For publishing:
 
-- Run `npm run chrome` to get zipped folder for chrome webstore upload
-- Run `npm run firefox` to get zipped folder for firefox addon upload
+- Run `npm run build:chrome` to get zipped folder for chrome webstore upload
+- Run `npm run build:firefox` to get zipped folder for firefox addon upload
 
 ## Note to self
 
 Firefox Add-Ons do not support service_workers and PIP api at the moment.
+
+## Contributors
+- @pinakipb2 
