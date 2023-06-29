@@ -8,6 +8,9 @@
   ytd-app ytd-watch:not([fullscreen])[theater] #player.ytd-watch,
   ytd-app
     ytd-watch-flexy:not([fullscreen])[theater]
+    #player-theater-container.ytd-watch-flexy,
+  ytd-app
+    ytd-watch-flexy:not([fullscreen])[theater]
     #player-wide-container.ytd-watch-flexy {
     height: calc(100vh - 56px);
     max-height: calc(100vh - 56px);
