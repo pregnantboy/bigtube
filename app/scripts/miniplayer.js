@@ -10,9 +10,6 @@ window.addEventListener('load', function () {
   })
 
   let youtubePlayer = null
-  let youtubePlayerContainer = null
-  let oldYoutubePlayerContainerParent = null
-  let playerWideContainer = null
   let isMiniPlayerMode = false
 
   window.addEventListener(
@@ -25,31 +22,18 @@ window.addEventListener('load', function () {
           youtubePlayer =
             youtubePlayer ?? document.getElementById('movie_player')
           if (!youtubePlayer) {
-            console.log('hi')
             window.removeEventListener('scroll', arguments.callee)
-            console.log('hide miniplayer: youtube player not found')
+            console.log('hiding miniplayer: youtube player not found')
             return
           }
           youtubePlayer.appendChild(backToTopButton)
-          youtubePlayerContainer =
-            youtubePlayerContainer ??
-            document.getElementById('player-container')
-          oldYoutubePlayerContainerParent = youtubePlayerContainer.parentElement
-          if (oldYoutubePlayerContainerParent.id !== 'player-wide-container') {
-            playerWideContainer =
-              playerWideContainer ??
-              document.getElementById('player-wide-container')
-            playerWideContainer.appendChild(youtubePlayerContainer)
-          }
           youtubePlayer.classList.add('bt-miniplayer', 'ytp-small-mode')
-          youtubePlayer.classList.remove('ytp-large-width-mode')
           window.dispatchEvent(new Event('resize'))
           isMiniPlayerMode = true
         }
       } else {
         // if not, disable miniplayer mode
         if (isMiniPlayerMode) {
-          oldYoutubePlayerContainerParent.appendChild(youtubePlayerContainer)
           youtubePlayer.classList.remove('bt-miniplayer', 'ytp-small-mode')
           window.dispatchEvent(new Event('resize'))
           isMiniPlayerMode = false
@@ -58,13 +42,4 @@ window.addEventListener('load', function () {
     },
     false
   )
-
-  // window.addEventListener('resize', function () {
-  //   if (isMiniPlayerMode) {
-  //     if (oldYoutubePlayerContainerParent.id !== 'cinematics-wide-container') {
-  //       cinematicsWideContainer = cinematicsWideContainer ?? this.document.getElementById('cinematics-wide-container')
-  //       cinematicsWideContainer.appendChild(youtubePlayerContainer)
-  //     }
-  //   }
-  // }, false)
 })

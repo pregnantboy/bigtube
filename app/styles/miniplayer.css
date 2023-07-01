@@ -16,6 +16,7 @@
     position: absolute;
     top: 5px;
     right: 5px;
+    width: 100px;
     z-index: 10;
   }
 
@@ -30,6 +31,16 @@
     max-height: 270px !important;
   }
 
+  #movie_player.bt-miniplayer .ytp-chrome-top-buttons {
+    display: none;
+  }
+
+  ytd-watch-flexy:not([theater])
+    #movie_player.bt-miniplayer
+    .ytp-progress-bar-container {
+    display: none;
+  }
+
   #movie_player.bt-miniplayer .ytp-chrome-bottom {
     /* account of left and right padding of 12px */
     width: 456px !important;
@@ -39,7 +50,6 @@
   #movie_player.bt-miniplayer .ytp-caption-segment {
     font-size: 12px !important;
   }
-
 
   #movie_player.bt-miniplayer .ytp-chrome-bottom {
     max-height: 36px !important;

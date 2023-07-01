@@ -10,3 +10,14 @@ export function setTheatreModeCookie(value) {
     console.error(e)
   }
 }
+
+export function removeTheatreModeCookie() {
+  try {
+    chrome.cookies.remove({
+      url: 'https://www.youtube.com',
+      name: 'wide',
+    })
+  } catch (e) {
+    console.error(e)
+  }
+}

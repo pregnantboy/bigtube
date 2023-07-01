@@ -1,4 +1,4 @@
-import { setTheatreModeCookie } from './bigtube.js'
+import { setTheatreModeCookie, removeTheatreModeCookie } from './bigtube.js'
 import {
   BIGTUBE_CONTENT_SCRIPT_ID,
   MINIPLAYER_CONTENT_SCRIPT_ID,
@@ -69,6 +69,7 @@ async function init() {
     setTheatreModeCookie(true)
     await registerScript(BIGTUBE_SCRIPT)
   } else if (!isBigtubeEnabled && isBigtubeRegistered) {
+    removeTheatreModeCookie()
     await unregisterScript(BIGTUBE_CONTENT_SCRIPT_ID)
   }
 
