@@ -4,6 +4,7 @@
     "webextensions": true,
     "es6": true
   },
+  "ignorePatterns": ["node_modules/", "dest*/", "*.mjs"],
   "extends": ["eslint:recommended", "prettier"],
   "plugins": ["prettier"],
   "parserOptions": {

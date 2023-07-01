@@ -53,6 +53,7 @@ const copyStaticFiles = async () => {
         'app/manifest.json',
         'app/images/*',
         'app/scripts/pip.js',
+        'app/scripts/miniplayer.js',
         'app/styles/*',
         `dest-${browser}`,
       ],
@@ -76,10 +77,10 @@ const modifyManifestForFirefox = () => {
   delete manifest.background.service_worker
   delete manifest.background.type
   manifest.host_permissions = ['https://www.youtube.com/*']
-  manifest.browser_specific_settings =  {
+  manifest.browser_specific_settings = {
     gecko: {
-      id: "{822ac6bc-1090-4d26-b32b-48d5f7085c76}"
-    }
+      id: '{822ac6bc-1090-4d26-b32b-48d5f7085c76}',
+    },
   }
   fs.writeFileSync(
     `dest-${browser}/manifest.json`,
