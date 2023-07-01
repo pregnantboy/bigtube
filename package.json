@@ -1,6 +1,7 @@
 {
   "name": "bigtube",
   "version": "4.1.0",
+  "type": "module",
   "description": "Expands Youtube video to browser size",
   "scripts": {
     "build:chrome": "node build.mjs --browser=chrome",
@@ -11,7 +12,11 @@
     "@parcel/core": "^2.7.0",
     "archiver": "^5.3.1",
     "copyfiles": "^2.4.1",
+    "eslint": "^8.44.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-prettier": "^4.2.1",
     "minimist": "^1.2.7",
+    "prettier": "2.8.8",
     "rimraf": "^3.0.2",
     "web-ext": "^7.3.1"
   }

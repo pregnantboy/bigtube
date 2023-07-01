@@ -10,4 +10,3 @@ export function setTheatreModeCookie(value) {
     console.error(e)
   }
 }
-

@@ -1,11 +1,9 @@
-import {
-  setTheatreModeCookie
-} from './bigtube.js'
+import { setTheatreModeCookie } from './bigtube.js'
 import {
   BIGTUBE_CONTENT_SCRIPT_ID,
   MINIPLAYER_CONTENT_SCRIPT_ID,
   ENABLE_BIGTUBE,
-  ENABLE_MINIPLAYER
+  ENABLE_MINIPLAYER,
 } from './constants.js'
 import { getStorageByKeys } from './storage.js'
 
@@ -40,11 +38,7 @@ async function isScriptRegistered(scriptId) {
         ids: [scriptId],
       },
       (registeredScripts) => {
-        resolve(
-          registeredScripts.some(
-            (s) => s.id === scriptId
-          )
-        )
+        resolve(registeredScripts.some((s) => s.id === scriptId))
       }
     )
   })
@@ -62,10 +56,15 @@ async function unregisterScript(scriptId) {
 }
 
 async function init() {
-  const [isBigtubeEnabled, isMiniplayerEnabled] = await getStorageByKeys([ENABLE_BIGTUBE, ENABLE_MINIPLAYER])
+  const [isBigtubeEnabled, isMiniplayerEnabled] = await getStorageByKeys([
+    ENABLE_BIGTUBE,
+    ENABLE_MINIPLAYER,
+  ])
 
   // Bigtube
-  const isBigtubeRegistered = await isScriptRegistered(BIGTUBE_CONTENT_SCRIPT_ID)
+  const isBigtubeRegistered = await isScriptRegistered(
+    BIGTUBE_CONTENT_SCRIPT_ID
+  )
   if (isBigtubeEnabled && !isBigtubeRegistered) {
     setTheatreModeCookie(true)
     await registerScript(BIGTUBE_SCRIPT)
@@ -74,7 +73,9 @@ async function init() {
   }
 
   // Miniplayer
-  const isMiniplayerRegistered = await isScriptRegistered(MINIPLAYER_CONTENT_SCRIPT_ID)
+  const isMiniplayerRegistered = await isScriptRegistered(
+    MINIPLAYER_CONTENT_SCRIPT_ID
+  )
   if (isMiniplayerEnabled && !isMiniplayerRegistered) {
     await registerScript(MINIPLAYER_SCRIPT)
   } else if (!isMiniplayerEnabled && isMiniplayerRegistered) {
@@ -82,6 +83,7 @@ async function init() {
   }
 }
 
+chrome.storage.onChanged.addListener(init)
 
 chrome.action.onClicked.addListener((tab) => {
   // check if active tab is a website
@@ -91,7 +93,6 @@ chrome.action.onClicked.addListener((tab) => {
   chrome.scripting.executeScript({
     target: { tabId: tab.id },
     files: ['scripts/pip.js'],
-
   })
 })
 
