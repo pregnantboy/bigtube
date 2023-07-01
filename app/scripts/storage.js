@@ -1,7 +1,11 @@
-export async function getStorageByKey(key) {
+export async function getStorageByKeys(keys) {
   return new Promise((resolve) => {
-    chrome.storage.local.get(key, (result) => {
-      resolve(result[key] ?? true)
+    chrome.storage.local.get(keys, (result) => {
+      const returnArray = []
+      for (const key of keys) {
+        returnArray.push(result[key] ?? true)
+      }
+      resolve(returnArray)
     })
   })
 }

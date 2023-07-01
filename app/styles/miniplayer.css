@@ -1,0 +1,53 @@
+@media screen and (min-width: 1015px) {
+  #movie_player.bt-miniplayer {
+    position: fixed;
+    /* just behind context menu */
+    z-index: 2299;
+    bottom: 10px;
+    right: 10px;
+    width: 480px;
+    height: 270px;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+  }
+
+  #movie_player .bt-btt-btn {
+    display: none;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    z-index: 10;
+  }
+
+  #movie_player.bt-miniplayer:hover .bt-btt-btn {
+    display: block;
+  }
+
+  #movie_player.bt-miniplayer video {
+    width: 480px !important;
+    height: 270px !important;
+    max-width: 480px !important;
+    max-height: 270px !important;
+  }
+
+  #movie_player.bt-miniplayer .ytp-chrome-bottom {
+    /* account of left and right padding of 12px */
+    width: 456px !important;
+    max-width: 456 !important;
+  }
+
+  #movie_player.bt-miniplayer .ytp-caption-segment {
+    font-size: 12px !important;
+  }
+
+
+  #movie_player.bt-miniplayer .ytp-chrome-bottom {
+    max-height: 36px !important;
+  }
+
+  /* Hide default/theatre view toggle and miniplayer buttons */
+  #movie_player.bt-miniplayer .ytp-size-button.ytp-button,
+  #movie_player.bt-miniplayer .ytp-miniplayer-button.ytp-button {
+    display: none;
+  }
+}

@@ -36,5 +36,5 @@
     }
   },
   "permissions": ["storage", "activeTab", "scripting", "cookies"],
-  "host_permissions": ["*://*/*"]
+  "host_permissions": ["https://www.youtube.com/*"]
 }
