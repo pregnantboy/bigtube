@@ -11,7 +11,16 @@
     #player-theater-container.ytd-watch-flexy,
   ytd-app
     ytd-watch-flexy:not([fullscreen])[theater]
-    #player-wide-container.ytd-watch-flexy {
+    #player-wide-container.ytd-watch-flexy,
+  ytd-app
+    ytd-watch-flexy:not([fullscreen])[theater]
+    #full-bleed-container.ytd-watch-flexy,
+  ytd-app
+    ytd-watch-flexy:not([fullscreen])[full-bleed-player]
+    #full-bleed-container.ytd-watch-flexy,
+  ytd-app
+    ytd-watch-flexy:not([fullscreen])[theater]
+    #player-full-bleed-container.ytd-watch-flexy {
     height: calc(100vh - 56px);
     max-height: calc(100vh - 56px);
   }
