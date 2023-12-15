@@ -9,19 +9,64 @@
     height: 270px;
     background-color: rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(5px);
+    transition: right ease-out 0.2s;
+    align-items: center;
+    justify-content: center;
   }
 
-  #movie_player .bt-btt-btn {
+  #movie_player.bt-miniplayer.bt-miniplayer-hidden {
+    right: -430px;
+  }
+
+  #movie_player .bt-btt-btn,
+  #movie_player .bt-hide-btn {
     display: none;
     position: absolute;
     top: 5px;
-    right: 5px;
     width: 100px;
-    z-index: 10;
+    z-index: 9999;
+    background: rgba(0, 0, 0, 0.5);
   }
 
-  #movie_player.bt-miniplayer:hover .bt-btt-btn {
-    display: block;
+  #movie_player.bt-miniplayer.bt-miniplayer-hidden .bt-hide-btn {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    /* 480 - 430px */
+    height: 50px;
+    width: 270px;
+    transform: rotate(-90deg);
+    transform-origin: 135px 135px;
+    border: none;
+    border-radius: 0;
+  }
+
+  #movie_player.bt-miniplayer:hover .bt-btt-btn,
+  #movie_player.bt-miniplayer:hover .bt-hide-btn {
+    display: flex;
+  }
+
+  #movie_player.bt-miniplayer:hover .bt-btt-btn:hover,
+  #movie_player.bt-miniplayer:hover .bt-hide-btn:hover {
+    border: 1px solid rgba(255, 255, 255, 0.5);
+  }
+
+  #movie_player .bt-btt-btn {
+    right: 5px;
+  }
+
+  #movie_player .bt-hide-btn {
+    left: 5px;
+  }
+
+  #movie_player .bt-hide-btn div {
+    transform: rotate(90deg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.5);
+    color: black;
   }
 
   #movie_player.bt-miniplayer video {
