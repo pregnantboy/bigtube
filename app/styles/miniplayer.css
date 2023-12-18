@@ -26,6 +26,8 @@
     width: 100px;
     z-index: 9999;
     background: rgba(0, 0, 0, 0.5);
+    color: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.2);
   }
 
   #movie_player.bt-miniplayer.bt-miniplayer-hidden .bt-hide-btn {
@@ -50,6 +52,8 @@
   #movie_player.bt-miniplayer:hover .bt-btt-btn:hover,
   #movie_player.bt-miniplayer:hover .bt-hide-btn:hover {
     border: 1px solid rgba(255, 255, 255, 0.5);
+    color: white;
+    background: rgba(0, 0, 0, 0.8);
   }
 
   #movie_player .bt-btt-btn {
