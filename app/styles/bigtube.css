@@ -24,6 +24,13 @@
     height: calc(100vh - 56px);
     max-height: calc(100vh - 56px);
   }
+  /* new for premium */
+  ytd-app
+    ytd-watch-grid:not([fullscreen])[theater]
+    #player-full-bleed-container.ytd-watch-grid {
+    height: calc(100vh - 56px);
+    max-height: calc(100vh - 56px);
+  }
 }
 
 @media screen and (min-height: 870px) and (min-width: 1320px) {

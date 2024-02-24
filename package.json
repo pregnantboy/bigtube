@@ -1,6 +1,6 @@
 {
   "name": "bigtube",
-  "version": "4.3.1",
+  "version": "4.3.2",
   "type": "module",
   "description": "Expands Youtube video to browser size",
   "scripts": {
