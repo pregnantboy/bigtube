@@ -1,7 +1,7 @@
 {
   "name": "BigTube - Better Youtube Theater Mode & More",
   "short_name": "BigTube",
-  "version": "4.3.1",
+  "version": "4.3.3",
   "manifest_version": 3,
   "description": "Full-sized theater mode, miniplayer on scroll, Popout player for all video sites.",
   "icons": {
