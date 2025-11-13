@@ -1,9 +1,11 @@
-import { setTheatreModeCookie, removeTheatreModeCookie } from './bigtube.js'
+import { setTheatreModeCookie, removeTheatreModeCookie } from './cookie.js'
 import {
   BIGTUBE_CONTENT_SCRIPT_ID,
   MINIPLAYER_CONTENT_SCRIPT_ID,
+  TOPBAR_HOVER_CONTENT_SCRIPT_ID,
   ENABLE_BIGTUBE,
   ENABLE_MINIPLAYER,
+  ENABLE_TOPBAR_HOVER,
 } from './constants.js'
 import { getStorageByKeys } from './storage.js'
 
@@ -22,6 +24,16 @@ const MINIPLAYER_SCRIPT = {
   js: ['./scripts/miniplayer.js'],
   css: ['./styles/miniplayer.css'],
   matches: ['https://www.youtube.com/*'],
+  runAt: 'document_start',
+}
+
+const TOPBAR_HOVER_SCRIPT = {
+  id: TOPBAR_HOVER_CONTENT_SCRIPT_ID,
+  allFrames: true,
+  js: ['./scripts/topbar-hover.js'],
+  css: ['./styles/topbar-hover.css'],
+  matches: ['https://www.youtube.com/*'],
+  persistAcrossSessions: true,
   runAt: 'document_start',
 }
 
@@ -56,10 +68,12 @@ async function unregisterScript(scriptId) {
 }
 
 async function init() {
-  const [isBigtubeEnabled, isMiniplayerEnabled] = await getStorageByKeys([
-    ENABLE_BIGTUBE,
-    ENABLE_MINIPLAYER,
-  ])
+  const [isBigtubeEnabled, isMiniplayerEnabled, isTopbarHoverEnabled] =
+    await getStorageByKeys([
+      ENABLE_BIGTUBE,
+      ENABLE_MINIPLAYER,
+      ENABLE_TOPBAR_HOVER,
+    ])
 
   // Bigtube
   const isBigtubeRegistered = await isScriptRegistered(
@@ -81,6 +95,15 @@ async function init() {
     await registerScript(MINIPLAYER_SCRIPT)
   } else if (!isMiniplayerEnabled && isMiniplayerRegistered) {
     await unregisterScript(MINIPLAYER_CONTENT_SCRIPT_ID)
+  }
+
+  const isTopbarHoverRegistered = await isScriptRegistered(
+    TOPBAR_HOVER_CONTENT_SCRIPT_ID
+  )
+  if (isTopbarHoverEnabled && !isTopbarHoverRegistered) {
+    await registerScript(TOPBAR_HOVER_SCRIPT)
+  } else if (!isTopbarHoverEnabled && isTopbarHoverRegistered) {
+    await unregisterScript(TOPBAR_HOVER_CONTENT_SCRIPT_ID)
   }
 }
 

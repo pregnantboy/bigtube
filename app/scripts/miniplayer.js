@@ -1,8 +1,41 @@
+// Constants
+const MP_SCROLL_THROTTLE_DELAY = 160 // milliseconds
+
 const HIDE_BUTTON_HTML =
   'Hide <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" focusable="false" style="pointer-events: none; display: block; width: 20px; height: 20px; fill: white; margin-right: -14px"><path d="m9.4 18.4-.7-.7 5.6-5.6-5.7-5.7.7-.7 6.4 6.4-6.3 6.3z"></path></svg>'
 
 const UNHIDE_BUTTON_HTML =
   'Show <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" focusable="false" style="pointer-events: none; display: block; width: 20px; height: 20px; fill: white; margin-right: -14px; transform: rotate(-90deg);"><path d="m9.4 18.4-.7-.7 5.6-5.6-5.7-5.7.7-.7 6.4 6.4-6.3 6.3z"></path></svg>'
+
+/**
+ * Combined throttle + debounce function for scroll events
+ * Runs at most once per throttle delay, but ensures final call is always processed
+ */
+function throttleWithTrailingDebounce(func, throttleDelay, debounceDelay) {
+  let lastCall = 0
+  let debounceTimer = null
+
+  return function (...args) {
+    const now = Date.now()
+
+    // Clear any pending debounced call
+    if (debounceTimer) {
+      clearTimeout(debounceTimer)
+    }
+
+    // If enough time has passed since last call, execute immediately (throttle)
+    if (now - lastCall >= throttleDelay) {
+      lastCall = now
+      func.apply(this, args)
+    }
+
+    // Always set up a debounced call to ensure final position is processed
+    debounceTimer = setTimeout(() => {
+      func.apply(this, args)
+      debounceTimer = null
+    }, debounceDelay)
+  }
+}
 
 window.addEventListener('load', function () {
   const backToTopButton = document.createElement('button')
@@ -23,6 +56,9 @@ window.addEventListener('load', function () {
   let youtubePlayer = null
   let isMiniPlayerMode = false
 
+  // Cache the threshold calculation
+  const getScrollThreshold = () => window.innerHeight - 100
+
   hideMiniplayerButton.addEventListener('click', function () {
     if (isMiniPlayerMode && youtubePlayer) {
       if (youtubePlayer.classList.contains('bt-miniplayer-hidden')) {
@@ -35,35 +71,48 @@ window.addEventListener('load', function () {
     }
   })
 
-  window.addEventListener(
-    'scroll',
-    function () {
-      // check if scrolled past the bottom of the youtube player
-      if (window.scrollY > window.innerHeight - 100) {
-        // if so, enable miniplayer mode
-        if (!isMiniPlayerMode) {
-          youtubePlayer =
-            youtubePlayer ?? document.getElementById('movie_player')
-          if (!youtubePlayer) {
-            window.removeEventListener('scroll', arguments.callee)
-            console.log('hiding miniplayer: youtube player not found')
-            return
-          }
-          youtubePlayer.appendChild(backToTopButton)
-          youtubePlayer.appendChild(hideMiniplayerButton)
-          youtubePlayer.classList.add('bt-miniplayer', 'ytp-small-mode')
-          window.dispatchEvent(new Event('resize'))
-          isMiniPlayerMode = true
-        }
-      } else {
-        // if not, disable miniplayer mode
-        if (isMiniPlayerMode) {
-          youtubePlayer.classList.remove('bt-miniplayer', 'ytp-small-mode')
-          window.dispatchEvent(new Event('resize'))
-          isMiniPlayerMode = false
-        }
+  function handleScroll() {
+    // Early return if we don't have a player element and can't find one
+    if (!youtubePlayer) {
+      youtubePlayer = document.getElementById('movie_player')
+      if (!youtubePlayer) {
+        console.log('hiding miniplayer: youtube player not found')
+        window.removeEventListener('scroll', throttledScrollHandler, {
+          passive: true,
+        })
+        return
       }
-    },
-    false
+    }
+
+    const scrollY = window.scrollY
+    const threshold = getScrollThreshold()
+
+    // check if scrolled past the bottom of the youtube player
+    if (scrollY > threshold) {
+      // if so, enable miniplayer mode
+      if (!isMiniPlayerMode) {
+        youtubePlayer.appendChild(backToTopButton)
+        youtubePlayer.appendChild(hideMiniplayerButton)
+        youtubePlayer.classList.add('bt-miniplayer', 'ytp-small-mode')
+        window.dispatchEvent(new Event('resize'))
+        isMiniPlayerMode = true
+      }
+    } else {
+      // if not, disable miniplayer mode
+      if (isMiniPlayerMode) {
+        youtubePlayer.classList.remove('bt-miniplayer', 'ytp-small-mode')
+        window.dispatchEvent(new Event('resize'))
+        isMiniPlayerMode = false
+      }
+    }
+  }
+
+  // Create throttled scroll handler with trailing debounce
+  const throttledScrollHandler = throttleWithTrailingDebounce(
+    handleScroll,
+    MP_SCROLL_THROTTLE_DELAY, // throttle delay: 160ms
+    50 // debounce delay: 50ms to catch final position
   )
+
+  window.addEventListener('scroll', throttledScrollHandler, { passive: true })
 })

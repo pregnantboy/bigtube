@@ -110,3 +110,10 @@
     display: none;
   }
 }
+
+@media screen and (max-width: 1015px) {
+  .bt-btt-btn.yt-spec-button-shape-next,
+  .bt-hide-btn.yt-spec-button-shape-next {
+    display: none;
+  }
+}

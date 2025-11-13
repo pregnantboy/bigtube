@@ -1,115 +1,125 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Bigtube</title>
-  <style>
-    :root {
-      --primary-color: #e74c3c;
-      --secondary-color: #c24234;
-    }
+  <head>
+    <title>Bigtube</title>
+    <style>
+      :root {
+        --primary-color: #e74c3c;
+        --secondary-color: #c24234;
+      }
 
-    body {
-      font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS',
-        sans-serif;
-      padding: 0 12px 10px;
-      font-size: 16px;
-    }
+      body {
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS',
+          sans-serif;
+        padding: 0 12px 10px;
+        font-size: 16px;
+      }
 
-    .row {
-      display: flex;
-      align-items: center;
-      min-height: 40px;
-    }
+      .row {
+        display: flex;
+        align-items: center;
+        min-height: 40px;
+      }
 
-    span {
-      font-size: 16px;
-      margin-left: 10px;
-      display: block;
-    }
+      span {
+        font-size: 16px;
+        margin-left: 10px;
+        display: block;
+      }
 
-    /* Checkbox */
+      /* Checkbox */
 
-    .o-checkbox {
-      width: 30px;
-      position: relative;
-      margin-top: -10px;
-    }
+      .o-checkbox {
+        width: 30px;
+        position: relative;
+        margin-top: -10px;
+      }
 
-    .o-checkbox input[type='checkbox'] {
-      visibility: hidden;
-    }
+      .o-checkbox input[type='checkbox'] {
+        visibility: hidden;
+      }
 
-    .o-checkbox input[type='checkbox']:checked+label:after {
-      opacity: 1;
-    }
+      .o-checkbox input[type='checkbox']:checked + label:after {
+        opacity: 1;
+      }
 
-    .o-checkbox input[type='checkbox'][disabled]+label {
-      background-color: #ddd;
-    }
+      .o-checkbox input[type='checkbox'][disabled] + label {
+        background-color: #ddd;
+      }
 
-    .o-checkbox label {
-      width: 28px;
-      height: 28px;
-      cursor: pointer;
-      position: absolute;
-      top: 0;
-      left: 0;
-      background: #fbfffe;
-      border: 1px solid #d1d1d1;
-      border-radius: 4px;
-    }
+      .o-checkbox label {
+        width: 28px;
+        height: 28px;
+        cursor: pointer;
+        position: absolute;
+        top: 0;
+        left: 0;
+        background: #fbfffe;
+        border: 1px solid #d1d1d1;
+        border-radius: 4px;
+      }
 
-    .o-checkbox label:after {
-      content: '';
-      width: 15px;
-      height: 7px;
-      position: absolute;
-      top: 5px;
-      left: 4px;
-      border: 5px solid var(--primary-color);
-      border-top: none;
-      border-right: none;
-      background: transparent;
-      opacity: 0;
-      transform: rotate(-45deg);
-      color: var(--primary-color);
-    }
+      .o-checkbox label:after {
+        content: '';
+        width: 15px;
+        height: 7px;
+        position: absolute;
+        top: 5px;
+        left: 4px;
+        border: 5px solid var(--primary-color);
+        border-top: none;
+        border-right: none;
+        background: transparent;
+        opacity: 0;
+        transform: rotate(-45deg);
+        color: var(--primary-color);
+      }
 
-    .o-checkbox label {
-      font-size: 20px;
-      line-height: 26px;
-    }
-  </style>
-</head>
+      .o-checkbox label {
+        font-size: 20px;
+        line-height: 26px;
+      }
+    </style>
+  </head>
 
-<body>
-  <h3>Options</h3>
-  <div class="row">
-    <div class="o-checkbox">
-      <input type="checkbox" id="bigtube-enable" name="bigtube-enable" />
-      <label for="bigtube-enable"></label>
+  <body>
+    <h3>Options</h3>
+    <div class="row">
+      <div class="o-checkbox">
+        <input type="checkbox" id="bigtube-enable" name="bigtube-enable" />
+        <label for="bigtube-enable"></label>
+      </div>
+      <label for="bigtube-enable"><span>Enable Bigtube on Youtube</span></label>
     </div>
-    <label for="bigtube-enable"><span>Enable Bigtube on Youtube</span></label>
-  </div>
-  <div class="row">
-    <div class="o-checkbox">
-      <input type="checkbox" id="miniplayer-enable" name="miniplayer-enable" />
-      <label for="miniplayer-enable"></label>
+    <div class="row">
+      <div class="o-checkbox">
+        <input
+          type="checkbox"
+          id="miniplayer-enable"
+          name="miniplayer-enable"
+        />
+        <label for="miniplayer-enable"></label>
+      </div>
+      <label for="miniplayer-enable"
+        ><span>Activate Youtube miniplayer on scroll</span></label
+      >
     </div>
-    <label for="miniplayer-enable"><span>Activate Youtube miniplayer on scroll</span></label>
-  </div>
+    <div class="row">
+      <div class="o-checkbox">
+        <input
+          type="checkbox"
+          id="topbar-hover-enable"
+          name="topbar-hover-enable"
+        />
+        <label for="topbar-hover-enable"></label>
+      </div>
+      <label for="topbar-hover-enable"
+        ><span>Hide Youtube navbar until hover</span></label
+      >
+    </div>
 
-  <p>You need to refresh existing Youtube tabs for changes to take effect.</p>
-  <h3>Picture-in-Picture keyboard shortcut</h3>
-  <p>
-    The default shortcut is <code>Alt+P (Windows)</code> or
-    <code>Option+P (Mac)</code>.
-  </p>
-  <p>
-    You can remap it at: <i>chrome://extensions/shortcuts</i> or <i>edge://extensions/shortcuts</i>
-  </p>
-</body>
+    <p>You need to refresh existing Youtube tabs for changes to take effect.</p>
+  </body>
 
-<script type="module" src="./options.js"></script>
-
+  <script type="module" src="./options.js"></script>
 </html>

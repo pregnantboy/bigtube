@@ -1,0 +1,67 @@
+@media (min-width: 857px) {
+  /* Hide YouTube topbar (masthead) by default */
+
+  ytd-masthead[is-watch-page] {
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+  }
+
+  /* Show topbar on hover, focus, active, and focus-visible */
+  ytd-masthead[is-watch-page]:hover,
+  ytd-masthead[is-watch-page]:focus-within,
+  ytd-masthead[is-watch-page]:focus,
+  ytd-masthead[is-watch-page]:active,
+  ytd-masthead[is-watch-page]:focus-visible {
+    opacity: 1;
+  }
+
+  /* Always show topbar when scrolling past the bottom of the player */
+  .bt-show-topbar ytd-masthead[is-watch-page] {
+    opacity: 1;
+  }
+
+  /* Also show topbar when search bar is focused */
+  ytd-masthead[is-watch-page]:has(input:focus) {
+    opacity: 1;
+  }
+
+  /* Show topbar when side menu is open */
+  ytd-masthead[is-watch-page]:has(#contentContainer[opened]) {
+    opacity: 1;
+  }
+
+  /* Show topbar when user menu is active */
+  ytd-app:has(tp-yt-iron-dropdown[focused]) ytd-masthead[is-watch-page]{
+    opacity: 1;
+  }
+
+
+  ytd-app:has(ytd-masthead[is-watch-page]) ytd-page-manager#page-manager.ytd-app {
+    margin-top: 0;
+  }
+
+
+  /* Adjust theater mode height when topbar is hidden */
+  ytd-app ytd-watch:not([fullscreen])[theater] #player.ytd-watch,
+  ytd-app
+    ytd-watch-flexy:not([fullscreen])[theater]
+    #player-theater-container.ytd-watch-flexy,
+  ytd-app
+    ytd-watch-flexy:not([fullscreen])[theater]
+    #player-wide-container.ytd-watch-flexy,
+  ytd-app
+    ytd-watch-flexy:not([fullscreen])[theater]
+    #full-bleed-container.ytd-watch-flexy,
+  ytd-app
+    ytd-watch-flexy:not([fullscreen])[full-bleed-player]
+    #full-bleed-container.ytd-watch-flexy,
+  ytd-app
+    ytd-watch-flexy:not([fullscreen])[theater]
+    #player-full-bleed-container.ytd-watch-flexy,
+  ytd-app
+    ytd-watch-grid:not([fullscreen])[theater]
+    #player-full-bleed-container.ytd-watch-grid {
+    height: 100vh;
+    max-height: 100vh;
+  } 
+}
