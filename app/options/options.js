@@ -14,11 +14,17 @@ getStorageByKeys([ENABLE_BIGTUBE, ENABLE_MINIPLAYER, ENABLE_TOPBAR_HOVER]).then(
     bigtubeEnable.checked = isBigtubeEnabled
     miniplayerEnable.checked = isMiniplayerEnabled
     topbarHoverEnable.checked = isTopbarHoverEnabled
+    topbarHoverEnable.disabled = !isBigtubeEnabled
   }
 )
 
 bigtubeEnable.onchange = (e) => {
   setStorageByKey(ENABLE_BIGTUBE, e.target.checked)
+  topbarHoverEnable.disabled = !e.target.checked
+  if (!e.target.checked) {
+    topbarHoverEnable.checked = false
+    setStorageByKey(ENABLE_TOPBAR_HOVER, false)
+  }
 }
 
 miniplayerEnable.onchange = (e) => {

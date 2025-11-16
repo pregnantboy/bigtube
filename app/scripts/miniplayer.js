@@ -2,10 +2,13 @@
 const MP_SCROLL_THROTTLE_DELAY = 160 // milliseconds
 
 const HIDE_BUTTON_HTML =
-  'Hide <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" focusable="false" style="pointer-events: none; display: block; width: 20px; height: 20px; fill: white; margin-right: -14px"><path d="m9.4 18.4-.7-.7 5.6-5.6-5.7-5.7.7-.7 6.4 6.4-6.3 6.3z"></path></svg>'
+  '<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" focusable="false" style="pointer-events: none; display: block; width: 24px; height: 24px; fill: white;"><path d="m9.4 18.4-.7-.7 5.6-5.6-5.7-5.7.7-.7 6.4 6.4-6.3 6.3z"></path></svg>'
 
 const UNHIDE_BUTTON_HTML =
-  'Show <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" focusable="false" style="pointer-events: none; display: block; width: 20px; height: 20px; fill: white; margin-right: -14px; transform: rotate(-90deg);"><path d="m9.4 18.4-.7-.7 5.6-5.6-5.7-5.7.7-.7 6.4 6.4-6.3 6.3z"></path></svg>'
+  '<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" focusable="false" style="pointer-events: none; display: block; width: 24px; height: 24px; fill: white; transform: rotate(-90deg);"><path d="m9.4 18.4-.7-.7 5.6-5.6-5.7-5.7.7-.7 6.4 6.4-6.3 6.3z"></path></svg>'
+
+const TO_TOP_BUTTON_HTML =
+  '<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" focusable="false" style="pointer-events: none; display: block; width: 24px; height: 24px; fill: white; transform: rotate(-90deg)"><path d="m9.4 18.4-.7-.7 5.6-5.6-5.7-5.7.7-.7 6.4 6.4-6.3 6.3z"></path></svg>'
 
 /**
  * Combined throttle + debounce function for scroll events
@@ -42,7 +45,7 @@ window.addEventListener('load', function () {
   // borrow styles from yt
   backToTopButton.className =
     'bt-btt-btn yt-spec-button-shape-next yt-spec-button-shape-next--outline yt-spec-button-shape-next--mono yt-spec-button-shape-next--size-m'
-  backToTopButton.innerText = 'Back to Top'
+  backToTopButton.innerHTML = TO_TOP_BUTTON_HTML
 
   const hideMiniplayerButton = document.createElement('button')
   hideMiniplayerButton.className =

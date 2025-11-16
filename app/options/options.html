@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Bigtube</title>
     <style>
       :root {
@@ -9,30 +11,30 @@
       }
 
       body {
-        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS',
-          sans-serif;
         padding: 0 12px 10px;
         font-size: 16px;
       }
 
       .row {
-        display: flex;
         align-items: center;
         min-height: 40px;
+        display: flex;
+      }
+
+      .row.shifted {
+        margin-left: 20px;
       }
 
       span {
-        font-size: 16px;
         margin-left: 10px;
+        font-size: 16px;
         display: block;
       }
 
-      /* Checkbox */
-
       .o-checkbox {
         width: 30px;
-        position: relative;
         margin-top: -10px;
+        position: relative;
       }
 
       .o-checkbox input[type='checkbox'] {
@@ -48,36 +50,44 @@
       }
 
       .o-checkbox label {
-        width: 28px;
-        height: 28px;
         cursor: pointer;
-        position: absolute;
-        top: 0;
-        left: 0;
         background: #fbfffe;
         border: 1px solid #d1d1d1;
         border-radius: 4px;
+        width: 28px;
+        height: 28px;
+        position: absolute;
+        top: 0;
+        left: 0;
       }
 
       .o-checkbox label:after {
         content: '';
+        border: 5px solid var(--primary-color);
+        opacity: 0;
+        color: var(--primary-color);
+        background: none;
+        border-top: none;
+        border-right: none;
         width: 15px;
         height: 7px;
         position: absolute;
         top: 5px;
         left: 4px;
-        border: 5px solid var(--primary-color);
-        border-top: none;
-        border-right: none;
-        background: transparent;
-        opacity: 0;
         transform: rotate(-45deg);
-        color: var(--primary-color);
       }
 
       .o-checkbox label {
         font-size: 20px;
         line-height: 26px;
+      }
+
+      .o-checkbox input[type='checkbox'][disabled] + label {
+        opacity: 0.5;
+      }
+
+      .row:has(input[type='checkbox'][disabled]) > label {
+        opacity: 0.5;
       }
     </style>
   </head>
@@ -90,6 +100,19 @@
         <label for="bigtube-enable"></label>
       </div>
       <label for="bigtube-enable"><span>Enable Bigtube on Youtube</span></label>
+    </div>
+    <div class="row shifted">
+      <div class="o-checkbox">
+        <input
+          type="checkbox"
+          id="topbar-hover-enable"
+          name="topbar-hover-enable"
+        />
+        <label for="topbar-hover-enable"></label>
+      </div>
+      <label for="topbar-hover-enable"
+        ><span>Hide Youtube navbar until hover 🆕</span></label
+      >
     </div>
     <div class="row">
       <div class="o-checkbox">
@@ -104,22 +127,8 @@
         ><span>Activate Youtube miniplayer on scroll</span></label
       >
     </div>
-    <div class="row">
-      <div class="o-checkbox">
-        <input
-          type="checkbox"
-          id="topbar-hover-enable"
-          name="topbar-hover-enable"
-        />
-        <label for="topbar-hover-enable"></label>
-      </div>
-      <label for="topbar-hover-enable"
-        ><span>Hide Youtube navbar until hover</span></label
-      >
-    </div>
 
     <p>You need to refresh existing Youtube tabs for changes to take effect.</p>
   </body>
-
   <script type="module" src="./options.js"></script>
 </html>

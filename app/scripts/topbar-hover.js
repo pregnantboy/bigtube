@@ -42,7 +42,6 @@ function debounce(func, delay) {
  * Handle scroll events and update topbar visibility
  */
 function handleScrollOrResize() {
-  console.log('handleScrollOrResize')
   // Cache DOM queries and calculations
   const scrollY = window.scrollY
   const viewportHeight = window.innerHeight

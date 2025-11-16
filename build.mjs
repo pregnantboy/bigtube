@@ -54,6 +54,7 @@ const copyStaticFiles = async () => {
         'app/images/*',
         'app/scripts/pip.js',
         'app/scripts/miniplayer.js',
+        'app/scripts/topbar-hover.js',
         'app/styles/*',
         `dest-${browser}`,
       ],

@@ -23,11 +23,11 @@
     display: none;
     position: absolute;
     top: 5px;
-    width: 100px;
+    padding: 0 !important;
+    width: 36px;
     z-index: 9999;
     background: rgba(0, 0, 0, 0.5);
     color: rgba(255, 255, 255, 0.7);
-    border: 1px solid rgba(255, 255, 255, 0.2);
   }
 
   #movie_player.bt-miniplayer.bt-miniplayer-hidden .bt-hide-btn {
@@ -74,8 +74,8 @@
   }
 
   #movie_player.bt-miniplayer video {
-    width: 480px !important;
-    height: 270px !important;
+    width: auto !important;
+    height: auto !important;
     max-width: 480px !important;
     max-height: 270px !important;
   }
@@ -102,6 +102,7 @@
 
   #movie_player.bt-miniplayer .ytp-chrome-bottom {
     max-height: 36px !important;
+    margin-bottom: 16px;
   }
 
   /* Hide default/theatre view toggle and miniplayer buttons */

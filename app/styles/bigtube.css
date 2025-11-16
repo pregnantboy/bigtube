@@ -19,6 +19,9 @@
     ytd-watch-flexy:not([fullscreen])[full-bleed-player]
     #full-bleed-container.ytd-watch-flexy,
   ytd-app
+    ytd-watch-flexy[full-bleed-player][respect-aspect-ratio]:not([fullscreen]) 
+    #full-bleed-container.ytd-watch-flexy,
+  ytd-app
     ytd-watch-flexy:not([fullscreen])[theater]
     #player-full-bleed-container.ytd-watch-flexy {
     height: calc(100vh - 56px);
